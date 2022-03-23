@@ -1,0 +1,39 @@
+{% extends "layout.html" %} 
+{% block title %}Finase{% endblock %}
+
+{% block button %}BUTTON Z loggin to znikniecia{% endblock %}
+
+{% block content %}
+
+<div id="card1"></div>
+<div id="card2"></div>
+<div id="entrytext">TAKE CONTROL OF YOUR FINANCES. THIS SITE WILL LET YOU MANAGE YOUR SPENDING. <br><br>
+                    DON’T HAVE AN ACCOUNT YET? CLICK <b>THIS</b> BUTTON
+</div>
+    <a href="/register" id="entrytextbutton">REGISTER</a>
+
+<form class="form-log-reg" style="left:75%" method="POST">
+    {{ form.hidden_tag() }}
+    <div>
+        {{ form.email(class="form-log-reg-input", placeholder="EMAIL") }}
+        <!-- <input class="form-log-reg-input" type="text" placeholder="EMAIL"/> -->
+    </div>
+
+    <div>
+        {{ form.password(class="form-log-reg-input", placeholder="PASSWORD") }}
+        <!-- <input class="form-log-reg-input" type="text" placeholder="PASSWORD"/> -->
+    </div>
+
+    <div>
+        {{ form.submit(class="form-log-reg-button") }}
+        <!-- <button class="form-log-reg-button" type="submit">LOGIN</button> -->
+    </div>
+
+</form>
+
+
+
+
+
+
+{% endblock %}
