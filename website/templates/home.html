@@ -1,4 +1,47 @@
 {% extends "layout.html" %} 
 {% block title %}Finase{% endblock %}
 
-{% block button %}BUTTON Z HOME{% endblock %}
+{% block button %}<a href="/logout" class="logout-button">LOGOUT</a> {% endblock %}
+
+{% block content %}
+
+<form class="main-form" method="POST">
+    {{ form.hidden_tag() }}
+    <!-- <div class="date-button">
+        <input type="date" id="start" name="trip-start"
+            value="2018-07-22"
+            min="2018-01-01" max="2018-12-31">
+    </div> -->
+    <input type=date id=e name="datah">
+
+
+    <div class="list-in-form">
+        {{ form.name (placeholder="Name") }}
+        {{ form.amount (placeholder="Amount") }}
+        {{ form.labell (placeholder="Label") }}
+        {{ form.submit }}
+    </div>
+</form>
+
+<div class="expenses_listing">
+    {% for expense in expenses %}
+    <p> {{ expense.amount }} za {{ expense.name }} dnia {{ expense.date_created }}</p>
+    {% endfor %}
+    <p> Total: {{ total_expenses }}</p>
+</div>
+
+
+
+
+
+<script>
+    document.getElementById('e').value = new Date().toISOString().substring(0, 10);
+    // function MyFunction() {
+    //     var x = document.getElementById('e').valueAsDate;
+    //     lista2 = document.getElementById("lista2")
+    //     lista2.innerHTML += "<div>" + x + "</div>"
+    //}
+</script>
+
+
+{% endblock %}  
