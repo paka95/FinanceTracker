@@ -161,7 +161,7 @@ box-shadow: 3px 3px 3px 0 rgba(0, 0, 0, 0.3);
   text-decoration: none;
   border-radius: 5px;
   color: rgb(255, 255, 255);
-  background-color: #35184B;
+  background-color: rgb(53, 24, 75);
   font-family: 'Rationale', sans-serif;
   width: 100px;
   font-size: 20px;
@@ -224,3 +224,32 @@ box-shadow: 3px 3px 3px 0 rgba(0, 0, 0, 0.3);
     top: 40%;
     background-color: red;
   }
+
+
+
+  /* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 10px;
+  margin-right:30px;
+ 
+  /* display: none; */
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+  background-color: rgba(200, 200, 200, 0.0);
+  border-radius: 10px;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+  background: rgba(50, 50, 50, 0.0); 
+  border-radius: 10px;
+ 
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+  background: rgba(53, 24, 75, 0.0); 
+  }
+  /* === */
