@@ -19,4 +19,4 @@ class ExpenseForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
     amount = FloatField('Amount', validators=[DataRequired()])
     labell = StringField('Label', validators=[DataRequired()])
-    submit = SubmitField('Add')
+    submit = SubmitField('Add expense')

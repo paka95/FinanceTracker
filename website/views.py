@@ -14,8 +14,8 @@ views = Blueprint("views", __name__)
 @login_required
 def home():
     form = ExpenseForm()
-    start = datetime(year=2022, month=3, day=25)
-    end = datetime(year=2022, month=3, day=26)
+    start = datetime(year=2022, month=3, day=26)
+    end = datetime(year=2022, month=3, day=27)
     # expenses = Expense.query.filter_by(date_created = '2022-03-25 21:11:57', user_id = current_user.id).all()
     expenses = Expense.query.filter((Expense.date_created > start) & (Expense.date_created < end)).filter_by(user_id = 1).all()
     # expenses = Expense.query.filter_by(user_id = current_user.id).all()
@@ -40,9 +40,10 @@ def home():
 
     # print(expenses)
     # print(expenses[1].date_created)
-    total_expenses = 0
+    total_expenses0 = 0
     for expense in expenses:
-        total_expenses = total_expenses + expense.amount
+        total_expenses0 = total_expenses0 + expense.amount
+        total_expenses = round(total_expenses0, 2)
     if request.method == "POST":
         if form.validate_on_submit():
             new_expense = Expense(name = form.name.data, amount = form.amount.data, label = form.labell.data, user_id = current_user.id)
@@ -53,11 +54,15 @@ def home():
             db.session.commit()
             return redirect(url_for('views.home'))
 
-
-
     return render_template("home.html", form = form, expenses = expenses, total_expenses = total_expenses)
 
 
 @views.route('/test')
 def test():
-    return render_template('test.html')
+    form = ExpenseForm()
+    expenses = Expense.query.filter_by(user_id = current_user.id).all()
+    total_expenses0 = 0
+    for expense in expenses:
+        total_expenses0 = total_expenses0 + expense.amount
+        total_expenses = round(total_expenses0, 2)
+    return render_template('test.html', form = form, expenses = expenses, total_expenses = total_expenses)

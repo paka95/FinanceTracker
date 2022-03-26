@@ -8,7 +8,8 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles.css') }}">
     <title>{% block title %}{% endblock %}</title>
 </head>
-<body style="background-color: #E5E5E5">
+<body style="background-color: rgb(51, 64, 97)">
+<!-- <body style="background-image: linear-gradient(to top right, rgba(51,64,97,0.6), rgba(51, 64, 97, 0.9));"> -->
     <nav class="navbar">
         <div class="title">FINANCE TRACKER</div>
         <div class="navbutton">{% block button %}{% endblock %}</div>
