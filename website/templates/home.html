@@ -5,7 +5,78 @@
 
 {% block content %}
 
-<form style="background-color: rgba(191, 191, 191, 0.5); 
+
+<div style="background-color: rgba(191, 191, 191, 0.5); 
+width: 800px; 
+height:500px; 
+position: absolute;
+font-family: Roboto;
+top: 50%;
+left: 50%;
+font-weight: bold;
+-ms-transform: translate(-50%, -50%);
+transform: translate(-50%, -50%);
+border-radius: 5px;
+border-style: solid;
+border-width: 1px;
+border-color: rgb(182, 189, 192)">
+
+
+<div style="padding: 10px; display: flex; height: 100%">
+    <div style="width: 60%; text-align: center; padding: 10px">
+        <form method="POST">
+            <div style="display: flex; width: 100%; justify-content: center;">
+                <input type=date id=e name="datah" value="{{terazdata}}">
+                <button type="submit" class="date-button">GO TO</button>
+            </div>
+        </form>
+        
+
+        <div style="width: 100%; height: 2px; background-color: rgb(53, 24, 75); margin-top: 10px; margin-bottom: 10px;"></div>
+
+        <div style="height: 300px; overflow-y: auto; overflow-x: hidden; padding: 10px">
+        {% for expense in expenses %}
+        <div style="display: flex; justify-content: space-between;"> 
+            <div style="width: 10%;">{{ expense.date_created.strftime('%H:%M') }} </div>
+            <div style="width: 35%;">{{ expense.name }} </div>
+            <div style="width: 20%;">{{ expense.label }}</div> 
+            <div style="width: 25%;">{{ expense.amount }}</div>
+        </div>
+        <div style="width: 100%; height: 1px; background-color: rgb(53, 24, 75); margin-top: 5px; margin-bottom: 5px;"></div>
+        {% endfor %}
+        </div>
+
+        <div style="width: 100%; height: 2px; background-color: rgb(53, 24, 75); margin-top: 10px; margin-bottom: 10px;"></div>
+
+        <div>
+            <div style="font-size: 20px; display:flex; justify-content: space-between; padding-right: 35px; padding-left: 35px;">
+                <div>daily expenses:</div>
+                <div>{{ total_expenses }}</div>
+            </div>
+            <div style="width: 100%; height: 1px; background-color: black; margin-top: 5px; margin-bottom: 5px;"></div>
+            <div style="font-size: 20px; display:flex; justify-content: space-between; padding-right: 35px; padding-left: 35px;">
+                <div>monthly expenses:</div>
+                <div>{{ montly_rounded }}</div>
+            </div>
+        </div>
+    </div>
+
+    <form style="width: 40%;" method="POST">
+        {{ form.hidden_tag() }}
+        <div style="padding: 20px; text-align: center; height: 320px; margin-top: 50px; ">
+            <input type=date style="display:none" name="datah2" value="{{terazdata}}">
+            <div>{{ form.name (placeholder="Name", style="width: 100%; height: 50px; border:none; text-align: center; border-radius: 5px; background-color: #C5C5C5; margin-top:10px; margin-bottom:10px", autocomplete="off") }}</div>
+            <div>{{ form.labell (placeholder="Label", style="width: 100%; height: 50px; border:none; text-align: center; border-radius: 5px; background-color: #C5C5C5; margin-top:10px; margin-bottom:10px", autocomplete="off") }}</div>
+            <div>{{ form.amount (placeholder="Amount", style="width: 100%; height: 50px; border:none; text-align: center; border-radius: 5px; background-color: #C5C5C5; margin-top:10px; margin-bottom:10px", autocomplete="off") }}</div>
+            <div>{{ form.submit (class="logout-button", style="margin: auto; width: 100%; height: 50px; margin-top: 10px") }}</div>
+        </div>
+    </form>
+</div>
+    
+</div>
+
+
+<!-- <form style="background-color: rgba(191, 191, 191, 0.5); 
 width: 800px; 
 height:500px; 
 position: absolute;
@@ -23,15 +94,17 @@ border-color: rgb(182, 189, 192)" method="POST">
 
 <div style="padding: 10px; display: flex; height: 100%">
     <div style="width: 60%; text-align: center; padding: 10px">
-        <div><input type=date id=e name="datah"></div>
+        <div><input type=date id=e name="datah" value="{{terazdata}}"></div>
+
         <div style="width: 100%; height: 2px; background-color: rgb(53, 24, 75); margin-top: 10px; margin-bottom: 10px;"></div>
 
         <div style="height: 300px; overflow-y: auto; overflow-x: hidden; padding: 10px">
         {% for expense in expenses %}
         <div style="display: flex; justify-content: space-between;"> 
-            <div style="width: 45%; ">{{ expense.name }} </div>
-            <div style="width: 20%; ">{{ expense.label }}</div> 
-            <div style="width: 25%; ">{{ expense.amount }}</div>
+            <div style="width: 10%;">{{ expense.date_created.strftime('%H:%M') }} </div>
+            <div style="width: 35%;">{{ expense.name }} </div>
+            <div style="width: 20%;">{{ expense.label }}</div> 
+            <div style="width: 25%;">{{ expense.amount }}</div>
         </div>
         <div style="width: 100%; height: 1px; background-color: rgb(53, 24, 75); margin-top: 5px; margin-bottom: 5px;"></div>
         {% endfor %}
@@ -45,7 +118,7 @@ border-color: rgb(182, 189, 192)" method="POST">
                 <div>{{ total_expenses }}</div>
             </div>
             <div style="width: 100%; height: 1px; background-color: black; margin-top: 5px; margin-bottom: 5px;"></div>
-            <div style="text-align: start; padding-left: 20px; font-size: 20px;">monthly expenses:</div>
+            <div style="text-align: start; padding-left: 20px; font-size: 20px;">monthly expenses: {{monthly_expenses}}</div>
         </div>
     </div>
 
@@ -59,15 +132,21 @@ border-color: rgb(182, 189, 192)" method="POST">
     </div>
 </div>
     
-</form>
+</form> -->
 
 
 
 
 
 <script>
-    document.getElementById('e').value = new Date().toISOString().substring(0, 10);
-    document.getElementById("heh").innerHTML = new Date().toISOString().substring(0, 24);
+    // document.getElementById('e').value = new Date().toISOString().substring(0, 10);
+    // function mouseUp() {
+    // document.getElementById("goto").click();
+    // }
+    // var data = new Date().toISOString().substring(0, 10);
+    // var time = new Date().toISOString().substring(11, 19);
+    // document.getElementById("heh").innerHTML = new Date().toISOString().substring(11, 19);
+    // document.getElementById("heh").innerHTML = data + " " + time;
     // function MyFunction() {
     //     var x = document.getElementById('e').valueAsDate;
     //     lista2 = document.getElementById("lista2")

@@ -203,19 +203,21 @@ box-shadow: 3px 3px 3px 0 rgba(0, 0, 0, 0.3);
 
   .date-button {
     background-color: #35184B;
-    position: absolute;
-    top: 8%;
+    /* position: absolute; */
+    /* top: 8%;
     left: 50%;
     height: 20%;
-    width: 25%;
-    color: white;
-    -ms-transform: translate(-50%);
-    transform: translate(-50%);
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    padding-top: 1%;
-    font-weight: bold;
-    font-size: 20px;
+    width: 25%; */
+    color: rgb(255, 255, 255);
+    border-radius: 5px;
+    /* -ms-transform: translate(-50%);
+    transform: translate(-50%); */
+    /* border-top-left-radius: 10px;
+    border-top-right-radius: 10px; */
+    /* padding-top: 1%; */
+    /* font-weight: bold; */
+    font-size: 15px;
+    font-family: 'Rationale', sans-serif;
   }
 
   .expenses_listing {
@@ -225,7 +227,12 @@ box-shadow: 3px 3px 3px 0 rgba(0, 0, 0, 0.3);
     background-color: red;
   }
 
-
+#e {
+  border-radius:5px; 
+  outline:none;
+  /* background-color: red; */
+  cursor: pointer
+}
 
   /* Scrollbar styling */
 ::-webkit-scrollbar {
