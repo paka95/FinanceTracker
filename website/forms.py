@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, FloatField
+from wtforms import StringField, PasswordField, SubmitField, FloatField, SelectField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 
 class RegisterForm(FlaskForm):
@@ -18,5 +18,7 @@ class LoginForm(FlaskForm):
 class ExpenseForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
     amount = FloatField('Amount', validators=[DataRequired()])
-    labell = StringField('Label', validators=[DataRequired()])
+    labell = SelectField('Label', validators=[DataRequired()], choices=[('Select a label'), ('Transport'), ('Bills'), ('Food'), ('Misc'), ('Fees')])
     submit = SubmitField('Add expense')
+
+

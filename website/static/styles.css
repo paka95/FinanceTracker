@@ -8,6 +8,7 @@ box-sizing: border-box;
 html body{
 margin: 0;
 padding: 0;
+background-image: url('tapette2.jpg');
 }
 
 .navbar {
@@ -91,7 +92,7 @@ box-shadow: 3px 3px 3px 0 rgba(0, 0, 0, 0.3);
 }
 
 ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-  color: lightgrey;
+  color: grey;
   opacity: 1; /* Firefox */
 }
 
@@ -169,22 +170,19 @@ box-shadow: 3px 3px 3px 0 rgba(0, 0, 0, 0.3);
   }
 
   .main-form{
-    background-color: #C4C4C4;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    -ms-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
-    font-family: 'Roboto', sans-serif;
-    /* width: 800px; 
-    height: 600px; */
-    /* w tym wypadku form ma takie same wymiary regardless of przyblizenie */
-    width: 40%; 
-    height: 60%;
-    border-radius: 10px;
-    box-shadow: 3px 3px 3px 0 rgba(0, 0, 0, 0.3);
-    text-align: center;
-    padding: 20px;    
+    background-color: rgba(191, 191, 191, 0.5); 
+    width: 800px; 
+    height:500px; 
+    font-weight: bold;
+    font-family: Roboto;
+    margin: auto;
+    margin-top: 5%;  
+    /*-ms-transform: translate(50%, 50%);
+    transform: translate(0, 30%);  */
+    border-radius: 5px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgb(182, 189, 192); 
   }
 
   .list-in-form {
@@ -227,12 +225,118 @@ box-shadow: 3px 3px 3px 0 rgba(0, 0, 0, 0.3);
     background-color: red;
   }
 
-#e {
+#date_picker {
   border-radius:5px; 
   outline:none;
-  /* background-color: red; */
+  background-color: rgb(220, 220, 220); 
   cursor: pointer
 }
+
+
+.expense_list {
+  display: flex; 
+  justify-content: space-between;
+  border-radius: 5px;
+  margin-bottom: 5px;
+  padding: 10px;
+  width: 100%; 
+  border: none;
+  outline: 0;
+  box-shadow: none;
+  /* background-color: #C5C5C5; */
+  /* background-color: rgb(111, 138, 207); */
+  /* background-color: rgba(191, 191, 191, 0.5); */
+  background-color: rgba(191, 191, 191, 0.0);
+}
+
+.expense_list:hover {
+  background-color: rgba(191, 191, 191, 0.3);
+  /* box-shadow: 0px 0px 5px 1px #35184B; */
+}
+
+.expense_list:focus {
+  outline: 0; 
+}
+.add_expense_form {
+  width: 100%; 
+  height: 50px; 
+  border:none; 
+  text-align: center; 
+  border-radius: 5px; 
+  background-color: #C5C5C5; 
+  margin-top:10px; 
+  margin-bottom:10px;
+}
+
+.add_expense_button {
+  display: block;
+  cursor: pointer;
+  text-decoration: none;
+  border-radius: 5px;
+  color: rgb(255, 255, 255);
+  background-color: rgb(53, 24, 75);
+  font-family: 'Rationale', sans-serif;
+  /* width: 100px; */
+  font-size: 20px;
+  box-shadow: 3px 3px 3px 0 rgba(0, 0, 0, 0.3);
+  margin: auto; 
+  width: 100%; 
+  height: 50px; 
+  margin-top: 10px
+}
+
+.update_expense_form {
+  width: 200px; 
+  height: 50px; 
+  border:none; 
+  text-align: center; 
+  border-radius: 5px; 
+  background-color: #C5C5C5; 
+  margin-top:10px; 
+  margin-bottom:10px;
+}
+
+.update_expense_form:active .update_expense_form:focus .add_expense_form:active .add_expense_form:focus{
+  outline: 0;
+  border-width: 0px;
+  border: none;
+}
+
+.update_button{
+  display: block;
+  cursor: pointer;
+  text-decoration: none;
+  border-radius: 5px;
+  color: rgb(255, 255, 255);
+  background-color: rgb(53, 24, 75);
+  font-family: 'Rationale', sans-serif;
+  font-size: 20px;
+  box-shadow: 3px 3px 3px 0 rgba(0, 0, 0, 0.3);
+
+  width: 100px; 
+  height: 50px; 
+  margin-top: 10px
+}
+
+.rusure {
+  font-family: Play; 
+}
+
+/* .modal {
+  width: 500px
+} */
+
+ .modal-dialog {
+  margin: auto;
+  margin-top: 100px;
+  
+}
+
+.modal-content {
+  background-color: rgba(191, 191, 191, 0.95);
+}
+
+
 
   /* Scrollbar styling */
 ::-webkit-scrollbar {
@@ -260,3 +364,18 @@ box-shadow: 3px 3px 3px 0 rgba(0, 0, 0, 0.3);
   background: rgba(53, 24, 75, 0.0); 
   }
   /* === */
+
+
+
+  select {
+    font-size: 16px;
+    line-height: 1;
+    border: 0;
+    color: grey;
+    border-radius: 5px;
+    height: 34px;
+    /* to jest plik ikony i zastepuje ona webkit appearance a potem mozna ta ikone przesuwac za pomoca background-position, zajebiscie */
+    background: url(http://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/br_down.png) no-repeat right #ddd;
+    -webkit-appearance: none;
+    background-position-x: 95%;
+}
