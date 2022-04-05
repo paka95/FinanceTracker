@@ -172,3 +172,26 @@ def delete_expense(id):
     db.session.commit()
     flash("Expense deleted", category="success")
     return redirect(url_for("views.homedate", data = lol2))
+
+
+
+@views.route("/preview/<dada>", methods=['GET', 'POST'])
+@login_required
+def preview(dada):
+    month = int(dada[5:7])
+    print("przeslana data", dada)
+    expenses = Expense.query.filter_by(user_id = current_user.id).filter(extract('month', Expense.date_created)==month).order_by(desc(Expense.date_created)).all()
+
+    monthly_expenses = 0
+    if expenses:
+        for m in expenses:
+            monthly_expenses = monthly_expenses + m.amount
+            monthly_rounded = round(monthly_expenses, 2)
+    else:
+        monthly_rounded = 0
+
+    if request.method == 'POST':
+        datt = request.form.get("datt")
+        return redirect(url_for("views.preview", dada = datt))
+    
+    return render_template("preview.html", expenses = expenses, dada = dada[:7], monthly_rounded = monthly_rounded, dada_back = dada)

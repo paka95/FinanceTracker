@@ -14,8 +14,8 @@
         <form method="POST" action="#">
             <div style="display: flex; width: 100%; justify-content: space-evenly;">
                 <button type="submit" class="date-button" formaction="/">TODAY</button>
-                <input type=date id=date_picker name="chosen_data" value="{{terazdata}}">
-                <button type="submit" class="date-button">GO TO</button>
+                <input type=date id=date_picker name="chosen_data" value="{{terazdata}}" onchange="goTo()">
+                <button type="submit" id="goto" class="date-button" style="display:none">GO TO</button>
             </div>
         </form>
         
@@ -27,9 +27,9 @@
 
         <button class="expense_list" type="button" data-toggle="modal" data-target="#edit{{expense.id}}"> 
             <div style="width: 10%; font-weight: bold;">{{ expense.date_created.strftime('%H:%M') }} </div>
-            <div style="width: 35%; font-weight: bold;">{{ expense.name }} </div>
+            <div style="width: 35%; font-weight: bold; text-overflow: ellipsis; overflow: hidden; height:20px ">{{ expense.name }} </div>
             <div style="width: 20%; font-weight: bold;">{{ expense.label }}</div> 
-            <div style="width: 25%; font-weight: bold;">{{ expense.amount }}</div>
+            <div style="width: 25%; font-weight: bold; text-overflow: ellipsis; overflow: hidden; height: 20px">{{ expense.amount }} zł</div>
         </button>
 
 
@@ -41,6 +41,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                 <h5 class="modal-title" style="font-family: Play;" id="exampleModalLabel"></h5>
+                <div>Added on {{expense.date_created}}</div>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -53,7 +54,7 @@
                     <div class="modal-body">
                         <div style="display: flex; justify-content: space-evenly;">
                             <input type=date style="display:none" name="chosen_data_in_form" value="{{terazdata}}">
-                            <input type="text" class="update_expense_form" name="updatename" id="updatename" placeholder="{{expense.name}}" autocomplete="off">
+                            <input type="text" class="tooltip-test update_expense_form" title="{{expense.name}}" name="updatename" id="updatename" value="{{expense.name}}" autocomplete="off">
                             
                             <select id="updatelabel" name="updatelabel" class="update_expense_form">
                                 <option value="select" disabled selected>Update label</option>
@@ -63,12 +64,12 @@
                                 <option value="Misc">Misc</option>
                                 <option value="Fees">Fees</option>
                             </select>
-                            <input type="text" class="update_expense_form" name="updateamount" id="updateamount" placeholder="{{expense.amount}}" autocomplete="off">
+                            <input type="text" class="update_expense_form" name="updateamount" id="updateamount" value="{{expense.amount}} zł" autocomplete="off">
                         </div>
                     </div>
                     <div style="display:flex; justify-content: space-evenly; padding: 10px">
                         <button class="update_button" type="submit" >Update</button>
-                        <button class="update_button" style="background-color: red;" data-dismiss="modal" data-toggle="modal" data-target="#delete{{expense.id}}">Delete</button> 
+                        <button class="delete_button" data-dismiss="modal" data-toggle="modal" data-target="#delete{{expense.id}}">Delete</button> 
                     </div>
                   </form>
             </div>
@@ -92,7 +93,7 @@
                     <input type=date style="display:none" name="chosen_data_in_form" value="{{terazdata}}">
                   <div style="display: flex; justify-content: space-evenly; padding: 10px">
                     <button class="update_button" data-dismiss="modal" >No</button>
-                    <button class="update_button" style="background-color: red;" formaction="/delete_expense/{{expense.id}}">Yes</button>
+                    <button class="delete_button" formaction="/delete_expense/{{expense.id}}">Yes</button>
                   </div>
                 </form>
               </div>
@@ -110,12 +111,12 @@
         <div>
             <div style="font-size: 20px; display:flex; justify-content: space-between; padding-right: 35px; padding-left: 35px;">
                 <div>daily expenses:</div>
-                <div>{{ total_expenses }}</div>
+                <div style="width: 100px; text-overflow: ellipsis; overflow: hidden; height: 30px" class="tooltip-test" title="{{total_expenses}} zł">{{ total_expenses }} zł</div>
             </div>
             <div style="width: 100%; height: 1px; background-color: black; margin-top: 5px; margin-bottom: 5px;"></div>
             <div style="font-size: 20px; display:flex; justify-content: space-between; padding-right: 35px; padding-left: 35px;">
-                <div>monthly expenses:</div>
-                <div>{{ montly_rounded }}</div>
+                <div><a href="/preview/{{terazdata}}" class="monthly_expenses_button">monthly expenses:</a></div>
+                <div style="width: 100px; text-overflow: ellipsis; overflow: hidden; height: 30px" class="tooltip-test" title="{{montly_rounded}} zł">{{ montly_rounded }} zł</div>
             </div>
         </div>
     </div>
@@ -142,83 +143,11 @@
 </div>
 
 
-<!-- <form style="background-color: rgba(191, 191, 191, 0.5); 
-width: 800px; 
-height:500px; 
-position: absolute;
-font-family: Roboto;
-top: 50%;
-left: 50%;
-font-weight: bold;
--ms-transform: translate(-50%, -50%);
-transform: translate(-50%, -50%);
-border-radius: 5px;
-border-style: solid;
-border-width: 1px;
-border-color: rgb(182, 189, 192)" method="POST">
-{{ form.hidden_tag() }}
-
-<div style="padding: 10px; display: flex; height: 100%">
-    <div style="width: 60%; text-align: center; padding: 10px">
-        <div><input type=date id=e name="datah" value="{{terazdata}}"></div>
-
-        <div style="width: 100%; height: 2px; background-color: rgb(53, 24, 75); margin-top: 10px; margin-bottom: 10px;"></div>
-
-        <div style="height: 300px; overflow-y: auto; overflow-x: hidden; padding: 10px">
-        {% for expense in expenses %}
-        <div style="display: flex; justify-content: space-between;"> 
-            <div style="width: 10%;">{{ expense.date_created.strftime('%H:%M') }} </div>
-            <div style="width: 35%;">{{ expense.name }} </div>
-            <div style="width: 20%;">{{ expense.label }}</div> 
-            <div style="width: 25%;">{{ expense.amount }}</div>
-        </div>
-        <div style="width: 100%; height: 1px; background-color: rgb(53, 24, 75); margin-top: 5px; margin-bottom: 5px;"></div>
-        {% endfor %}
-        </div>
-
-        <div style="width: 100%; height: 2px; background-color: rgb(53, 24, 75); margin-top: 10px; margin-bottom: 10px;"></div>
-
-        <div>
-            <div style="font-size: 20px; display:flex; justify-content: space-between; padding-right: 35px; padding-left: 35px;">
-                <div>daily expenses:</div>
-                <div>{{ total_expenses }}</div>
-            </div>
-            <div style="width: 100%; height: 1px; background-color: black; margin-top: 5px; margin-bottom: 5px;"></div>
-            <div style="text-align: start; padding-left: 20px; font-size: 20px;">monthly expenses: {{monthly_expenses}}</div>
-        </div>
-    </div>
-
-    <div style="width: 40%;  ">
-        <div style="padding: 20px; text-align: center; height: 320px; margin-top: 50px; ">
-            <div>{{ form.name (placeholder="Name", style="width: 100%; height: 50px; border:none; text-align: center; border-radius: 5px; background-color: #C5C5C5; margin-top:10px; margin-bottom:10px", autocomplete="off") }}</div>
-            <div>{{ form.labell (placeholder="Label", style="width: 100%; height: 50px; border:none; text-align: center; border-radius: 5px; background-color: #C5C5C5; margin-top:10px; margin-bottom:10px", autocomplete="off") }}</div>
-            <div>{{ form.amount (placeholder="Amount", style="width: 100%; height: 50px; border:none; text-align: center; border-radius: 5px; background-color: #C5C5C5; margin-top:10px; margin-bottom:10px", autocomplete="off") }}</div>
-            <div>{{ form.submit (class="logout-button", style="margin: auto; width: 100%; height: 50px; margin-top: 10px") }}</div>
-        </div>
-    </div>
-</div>
-    
-</form> -->
-
-
-
-
-
 
 <script>
-    // document.getElementById('e').value = new Date().toISOString().substring(0, 10);
-    // function mouseUp() {
-    // document.getElementById("goto").click();
-    // }
-    // var data = new Date().toISOString().substring(0, 10);
-    // var time = new Date().toISOString().substring(11, 19);
-    // document.getElementById("heh").innerHTML = new Date().toISOString().substring(11, 19);
-    // document.getElementById("heh").innerHTML = data + " " + time;
-    // function MyFunction() {
-    //     var x = document.getElementById('e').valueAsDate;
-    //     lista2 = document.getElementById("lista2")
-    //     lista2.innerHTML += "<div>" + x + "</div>"
-    //}
+function goTo() {
+    document.getElementById("goto").click();
+}
 </script>
 
 
