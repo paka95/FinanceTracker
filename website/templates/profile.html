@@ -1,0 +1,62 @@
+{% extends "layout.html" %} 
+{% block title %}Profile{% endblock %}
+
+{% block button %}
+
+<div class="dropdown">
+    <a class="dropdown-toggle logout-button" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Options
+    </a>
+  
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+      <a class="dropdown-item" href="/">Home</a>
+      <a class="dropdown-item" href="/logout">Logout</a>
+    </div>
+</div>
+
+
+{% endblock %}
+
+{% block content %}
+
+<div class="main-form" style="padding: 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+   
+    <div style="height: 100px; display:flex;">
+        <img src="/static/user.png" alt="useravatar" width="100px" height="100px" style="left:0%"></img>
+        <div>
+            <div style="margin-left: 30px; margin-top: 35px;  color:#342f2f">Email address: <b>{{user.email}}</b></div>
+        </div>
+    </div>
+
+    <div style="height: 1px; width:100%; margin-top: 10px; background-color:#232121"></div>
+
+    <div style="padding: 10px">
+        <div><a href="#" >Edit password</a></div>
+        <div style="height: 1px; width:100%; margin-top: 10px; margin-bottom: 10px; background-color:#342f2f"></div>
+        <div style="display: flex">
+            <div>Change currency: </div>
+            <form method="POST" action="/change_currency">
+                <select style="height: 25px; width: 50px; margin-left: 10px; padding: 5px; border-radius: 2px;" onchange="change_currency()" value="currency" name="cur">
+                    <option value="zł">zł</option>
+                    <option value="€">€</option>
+                    <option value="£">£</option>
+                    <option value="{{currency}}" selected disabled hidden>{{currency}}</option>
+                </select>
+                <input type="submit" id="cur" style="display: none">
+            </form>
+        </div>
+        <div style="height: 1px; width:100%; margin-top: 10px; margin-bottom: 10px; background-color:#342f2f"></div>
+        <div><a href="#" style="color: red">Delete account</a></div>
+    </div>
+
+
+</div>
+
+<script>
+    function change_currency() {
+        document.getElementById("cur").click();
+    }
+    </script>
+
+
+{% endblock %}  

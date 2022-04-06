@@ -1,4 +1,5 @@
 # from website import db, login_manager
+from email.policy import default
 from . import db
 from datetime import date, datetime
 from flask_login import UserMixin
@@ -12,6 +13,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(60), nullable=False)
     date_created = db.Column(db.DateTime(timezone=True), default=func.now())
     expenses = db.relationship('Expense', backref='user', lazy=True)
+    currency = db.Column(db.String(5), default='zł')
 
 
 class Expense(db.Model, UserMixin):

@@ -2,7 +2,7 @@ from unicodedata import category
 from flask import Blueprint, render_template, request, flash, redirect, url_for, jsonify
 from flask_login import login_required, current_user
 from website.forms import ExpenseForm
-from website.models import Expense
+from website.models import Expense, User
 from website import db
 from datetime import datetime, date
 from sqlalchemy.sql import func, and_
@@ -23,55 +23,11 @@ def home():
 
 @views.route('/test', methods=['POST', 'GET'])
 def test():
-    return render_template('test.html')
+    user = User.query.filter_by(id=current_user.id).first()
+    month = Expense.query.filter_by(user_id = current_user.id).filter(extract('month', Expense.date_created)==4).group_by(Expense.label).all()
 
-
-
-# @views.route('/test2', methods=['POST', 'GET'])
-# def test2():
-#     form = ExpenseForm()
-#     expenses = Expense.query.filter_by(user_id = current_user.id).all()
-#     total_expenses0 = 0
-#     for expense in expenses:
-#         total_expenses0 = total_expenses0 + expense.amount
-#         total_expenses = round(total_expenses0, 2)
-#     if request.method == "POST":
-        
-#         data = request.form.get('datah')
-#         return redirect(url_for('views.homedate', data = data))
-#     return render_template('test2.html', form = form, expenses = expenses, total_expenses = total_expenses)
-
-
-# @views.route('/test3', methods=['POST', 'GET'])
-# def test3():
-#     form = ExpenseForm()
-#     expenses = Expense.query.filter_by(user_id = current_user.id).all()
-#     total_expenses0 = 0
-#     for expense in expenses:
-#         total_expenses0 = total_expenses0 + expense.amount
-#         total_expenses = round(total_expenses0, 2)
-#     if request.method == "POST":
-        
-#         data = request.form.get('datah')
-#         return redirect(url_for('views.homedate', data = data))
-#     return render_template('test3.html', form = form, expenses = expenses, total_expenses = total_expenses)
-
-
-
-
-@views.route("/<data>", methods=['GET', 'POST'])
-@login_required
-def homedate(data):
-    # now = datetime.now()
-    now = datetime.strptime(data, "%Y-%m-%d")
-    month_number = now.strftime("%m")
-    month_number = int(month_number)
-
-    form = ExpenseForm()
-    expenses = Expense.query.filter(func.date(Expense.date_created) == data).filter(Expense.user_id == current_user.id).order_by(desc(Expense.date_created)).all()
-    month = Expense.query.filter_by(user_id = current_user.id).filter(extract('month', Expense.date_created)==month_number).all()
-    # month = Expense.query.filter_by(user_id = current_user.id).filter(extract('month', Expense.date_created)==4).all()
-    
+    for m in month:
+        print("wydatki:", m.name, m.amount)
 
     montly_expenses = 0
     if month:
@@ -80,6 +36,43 @@ def homedate(data):
             montly_rounded = round(montly_expenses, 2)
     else:
         montly_rounded = 0
+    return render_template('test.html', expenses = month, user = user, montly_rounded = montly_rounded)
+
+
+
+@views.route('/test2', methods=['POST', 'GET'])
+def test2():
+    user = User.query.filter_by(id=current_user.id).first()
+    month = db.session.query(Expense.label, db.func.round(db.func.sum(Expense.amount), 2)).filter_by(user_id = current_user.id).filter(extract('month', Expense.date_created)==4).group_by(Expense.label).all()
+
+    total = 0
+    for row in month:
+        total = total + row[1]
+    print(total)
+    
+    return render_template('test2.html', total = total, month = month)
+
+
+@views.route("/<data>", methods=['GET', 'POST'])
+@login_required
+def homedate(data):
+    now = datetime.strptime(data, "%Y-%m-%d")
+    month_number = now.strftime("%m")
+    month_number = int(month_number)
+
+    form = ExpenseForm()
+    user = User.query.filter_by(id=current_user.id).first()
+    expenses = Expense.query.filter(func.date(Expense.date_created) == data).filter(Expense.user_id == current_user.id).order_by(desc(Expense.date_created)).all()
+    month = Expense.query.filter_by(user_id = current_user.id).filter(extract('month', Expense.date_created)==month_number).all()
+
+    montly_expenses = 0
+    if month:
+        for m in month:
+            montly_expenses = montly_expenses + m.amount
+            montly_rounded = round(montly_expenses, 2)
+    else:
+        montly_rounded = 0
+
 
     total_expenses0 = 0
     if expenses:
@@ -113,7 +106,7 @@ def homedate(data):
         elif chosen_data:
             return redirect(url_for('views.homedate', data = chosen_data))
 
-    return render_template("home.html", form = form, expenses = expenses, terazdata = data, total_expenses = total_expenses, montly_rounded = montly_rounded)
+    return render_template("home.html", form = form, expenses = expenses, terazdata = data, total_expenses = total_expenses, montly_rounded = montly_rounded, user = user)
 
 
 @views.route("/change_expense/<id>", methods=['GET', 'POST'])
@@ -180,6 +173,7 @@ def delete_expense(id):
 def preview(dada):
     month = int(dada[5:7])
     print("przeslana data", dada)
+    user = User.query.filter_by(id=current_user.id).first()
     expenses = Expense.query.filter_by(user_id = current_user.id).filter(extract('month', Expense.date_created)==month).order_by(desc(Expense.date_created)).all()
 
     monthly_expenses = 0
@@ -194,4 +188,25 @@ def preview(dada):
         datt = request.form.get("datt")
         return redirect(url_for("views.preview", dada = datt))
     
-    return render_template("preview.html", expenses = expenses, dada = dada[:7], monthly_rounded = monthly_rounded, dada_back = dada)
+    return render_template("preview.html", expenses = expenses, dada = dada[:7], monthly_rounded = monthly_rounded, dada_back = dada, user = user)
+
+
+
+@views.route("/change_currency", methods=['POST', 'GET'])
+@login_required
+def change_currency():
+    user = User.query.filter_by(id=current_user.id).first()
+    if request.method == "POST":
+        currency = request.form.get("cur")
+        user.currency = currency
+        db.session.commit()
+    return redirect(url_for("views.profile"))
+
+
+
+@views.route("/profile")
+@login_required
+def profile():
+    user = User.query.filter_by(id=current_user.id).first()
+    currency = user.currency
+    return render_template("profile.html", user = user, currency = currency)

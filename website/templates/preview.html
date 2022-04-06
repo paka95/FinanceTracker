@@ -1,7 +1,21 @@
 {% extends "layout.html" %} 
 {% block title %}Finase{% endblock %}
 
-{% block button %}<a href="/logout" class="logout-button">LOGOUT</a> {% endblock %}
+{% block button %}
+
+<div class="dropdown">
+    <a class="dropdown-toggle logout-button" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Options
+    </a>
+  
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+      <a class="dropdown-item" href="/">Home</a>
+      <a class="dropdown-item" href="/profile">Profile</a>
+      <a class="dropdown-item" href="/logout">Logout</a>
+    </div>
+</div>
+
+{% endblock %}
 
 {% block content %}
 
@@ -28,7 +42,13 @@
                 <div style="width: 20%; font-weight: bold;">{{ expense.date_created.strftime('%d-%m %H:%M') }} </div>
                 <div style="width: 25%; font-weight: bold;">{{ expense.name }} </div>
                 <div style="width: 20%; font-weight: bold;">{{ expense.label }}</div> 
-                <div style="width: 25%; font-weight: bold;">{{ expense.amount }} zł</div>
+                <div style="width: 25%; font-weight: bold;">
+                    {% if user.currency == "zł" %}
+                        {{ expense.amount }} {{ user.currency }}
+                    {% else %}
+                        {{ user.currency }}{{ expense.amount }}
+                    {% endif %}
+                </div>
             </button>
             <div style="width: 100%; height: 1px; background-color: rgb(53, 24, 75); margin-top: 5px; margin-bottom: 5px;"></div>
             {% endfor %}
@@ -38,11 +58,19 @@
 
         <div style="height: 50px; display:flex; float: right; margin-right: 50px; font-size: 25px;">
             <div style="width: 100px; text-align: center;">Total:</div> 
-            <div style="width: 100px">{{monthly_rounded}} zł</div>
+            <div style="width: 120px">
+                {% if user.currency == "zł" %}
+                    {{monthly_rounded}} {{user.currency}}
+                {% else %}
+                    {{user.currency}}{{monthly_rounded}}
+                {% endif %}
+            </div>
         </div>
     </div>
     </div>
 </div>
+
+
 
 
 <script>
