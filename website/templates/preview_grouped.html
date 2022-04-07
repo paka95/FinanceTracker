@@ -28,28 +28,25 @@
         <form method="POST" style="text-align: center; height: 50px; padding: 10px; display: flex; justify-content: space-between;">
             <a href="/" class="date-button" style="width:100px; display:block; padding: 4px">BACK</a>
             <input type="month" id=date_picker name="datt" value="{{dada}}" onchange="goTo()"/>
-            
             <input type="submit" id="goto" style="display:none">
-            <a href="/preview/{{dada}}/group" class="date-button" style="width:100px; display:block; padding: 4px">GROUP</a>
+            <a href="/preview/{{dada}}" class="date-button" style="width:100px; display:block; padding: 4px">UNGROUP</a>
         </form>
 
     <div style="width: 60%; text-align: center;"></div>
         <div style="width: 100%; height: 2px; background-color: rgb(53, 24, 75); margin-top: 10px; margin-bottom: 10px;"></div>
 
         <div style="height: 300px; overflow-y: auto; overflow-x: hidden; padding: 10px;">
-            {% for expense in expenses %}
+            {% for row in month %}
 
-            <button class="expense_list" type="button" data-toggle="modal" data-target="#edit{{expense.id}}"> 
-                <div style="width: 20%; font-weight: bold;">{{ expense.date_created.strftime('%d-%m %H:%M') }} </div>
-                <div style="width: 25%; font-weight: bold;">{{ expense.name }} </div>
-                <div style="width: 20%; font-weight: bold;">{{ expense.label }}</div> 
-                <div style="width: 25%; font-weight: bold;">
-                    {% if user.currency == "zł" %}
-                        {{ expense.amount }} {{ user.currency }}
-                    {% else %}
-                        {{ user.currency }}{{ expense.amount }}
-                    {% endif %}
-                </div>
+            <button class="expense_list" type="button" data-toggle="modal" data-target="" > 
+                <div style="width: 30%; font-weight: bold;">{{ row[0] }} </div>
+                <div style="width: 30%; font-weight: bold;">
+                {% if user.currency == "zł" %}
+                    {{ row[1] }} {{ user.currency }}
+                {% else %}
+                    {{ user.currency }}{{ row[1] }}
+                {% endif %}
+                </div> 
             </button>
             <div style="width: 100%; height: 1px; background-color: rgb(53, 24, 75); margin-top: 5px; margin-bottom: 5px;"></div>
             {% endfor %}
@@ -61,9 +58,9 @@
             <div style="width: 100px; text-align: center;">Total:</div> 
             <div style="width: 120px">
                 {% if user.currency == "zł" %}
-                    {{monthly_rounded}} {{user.currency}}
+                    {{ total }} {{ user.currency }}
                 {% else %}
-                    {{user.currency}}{{monthly_rounded}}
+                    {{ user.currency }}{{ total }}
                 {% endif %}
             </div>
         </div>
@@ -71,15 +68,11 @@
     </div>
 </div>
 
-
-
-
 <script>
     function goTo() {
         document.getElementById("goto").click();
     }
 </script>
-
 
 
 {% endblock %}  

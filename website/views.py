@@ -192,6 +192,27 @@ def preview(dada):
 
 
 
+@views.route("/preview/<dada>/group", methods=['GET', 'POST'])
+@login_required
+def preview_grouped(dada):
+    month_date = int(dada[5:7])
+    print("dada:", dada)
+    print("month_date:", month_date)
+    user = User.query.filter_by(id=current_user.id).first()
+    month = db.session.query(Expense.label, db.func.round(db.func.sum(Expense.amount), 2)).filter_by(user_id = current_user.id).filter(extract('month', Expense.date_created)==month_date).group_by(Expense.label).all()
+
+    total = 0
+    for row in month:
+        total = total + row[1]
+    print(total)
+    
+    if request.method == 'POST':
+        datt = request.form.get("datt")
+        return redirect(url_for("views.preview_grouped", dada = datt))
+
+    return render_template('preview_grouped.html', total = total, month = month, dada = dada, user = user)
+
+
 @views.route("/change_currency", methods=['POST', 'GET'])
 @login_required
 def change_currency():
