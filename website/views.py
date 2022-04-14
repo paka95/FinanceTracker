@@ -24,19 +24,10 @@ def home():
 @views.route('/test', methods=['POST', 'GET'])
 def test():
     user = User.query.filter_by(id=current_user.id).first()
-    month = Expense.query.filter_by(user_id = current_user.id).filter(extract('month', Expense.date_created)==4).group_by(Expense.label).all()
-
-    for m in month:
-        print("wydatki:", m.name, m.amount)
-
-    montly_expenses = 0
-    if month:
-        for m in month:
-            montly_expenses = montly_expenses + m.amount
-            montly_rounded = round(montly_expenses, 2)
-    else:
-        montly_rounded = 0
-    return render_template('test.html', expenses = month, user = user, montly_rounded = montly_rounded)
+    month = db.session.query(Expense.label, db.func.round(db.func.sum(Expense.amount), 2)).filter_by(user_id = current_user.id).filter(extract('month', Expense.date_created)==4).group_by(Expense.label).all() 
+    for row in month:
+        print("label", month[0][0], "amount", row[1])
+    return render_template('test.html', month = month, user = user)
 
 
 
@@ -64,6 +55,7 @@ def homedate(data):
     user = User.query.filter_by(id=current_user.id).first()
     expenses = Expense.query.filter(func.date(Expense.date_created) == data).filter(Expense.user_id == current_user.id).order_by(desc(Expense.date_created)).all()
     month = Expense.query.filter_by(user_id = current_user.id).filter(extract('month', Expense.date_created)==month_number).all()
+    month_grouped = db.session.query(Expense.label, db.func.round(db.func.sum(Expense.amount), 2)).filter_by(user_id = current_user.id).filter(extract('month', Expense.date_created)==month_number).group_by(Expense.label).all()
 
     montly_expenses = 0
     if month:
@@ -105,8 +97,12 @@ def homedate(data):
             return redirect(url_for('views.homedate', data = lol2))
         elif chosen_data:
             return redirect(url_for('views.homedate', data = chosen_data))
+        else:
+            lol2 = request.form.get('chosen_data_in_form')
+            flash("Please enter smaller amount", category='danger')
+            return redirect(url_for('views.homedate', data = lol2))
 
-    return render_template("home.html", form = form, expenses = expenses, terazdata = data, total_expenses = total_expenses, montly_rounded = montly_rounded, user = user)
+    return render_template("home.html", form = form, expenses = expenses, terazdata = data, total_expenses = total_expenses, montly_rounded = montly_rounded, user = user, month_grouped = month_grouped)
 
 
 @views.route("/change_expense/<id>", methods=['GET', 'POST'])
@@ -121,34 +117,51 @@ def change_expense(id):
         first = request.form.get("updatename")
         second = request.form.get("updatelabel")
         third = request.form.get("updateamount")
-        if first and second and third:
-            expense.name = first
-            expense.label = second
-            expense.amount = third
-            flash("Whole expense updated", category="success")
-        elif first and second:
-            expense.name = first
-            expense.label = second
-            flash("Updated name and label", category="success")
-        elif first and third:
-            expense.name = first
-            expense.amount = third
-            flash("Updated name and amount", category="success")
-        elif second and third:
-            expense.label = second
-            expense.amount = third
-            flash("Updated label and amount", category="success")
-        elif first:
-            expense.name = first
-            flash("Updated name", category="success")
-        elif second:
-            expense.label = second
-            flash("Updated label", category="success")
-        elif third:
-            expense.amount = third
-            flash("Updated amount", category="success")
+        print("name", first)
+        print("label", second)
+        print("amount", third)
+        expense.name = first
+        if second == None:
+            expense.label = expense.label
+            print("if", expense.label)
         else:
-            flash("Nothing updated", category="info")
+            expense.label = second
+            print("else", expense.label)
+        if float(third) > 99999:
+            flash("Enter smaller amount", category='danger')
+            return redirect(url_for("views.homedate", data = lol2))
+        else:
+            expense.amount = third
+        flash("Expense updated", category='success')
+
+        # if first and second and third:
+        #     expense.name = first
+        #     expense.label = second
+        #     expense.amount = third
+        #     flash("Whole expense updated", category="success")
+        # elif first and second:
+        #     expense.name = first
+        #     expense.label = second
+        #     flash("Updated name and label", category="success")
+        # elif first and third:
+        #     expense.name = first
+        #     expense.amount = third
+        #     flash("Updated name and amount", category="success")
+        # elif second and third:
+        #     expense.label = second
+        #     expense.amount = third
+        #     flash("Updated label and amount", category="success")
+        # elif first:
+        #     expense.name = first
+        #     flash("Updated name", category="success")
+        # elif second:
+        #     expense.label = second
+        #     flash("Updated label", category="success")
+        # elif third:
+        #     expense.amount = third
+        #     flash("Updated amount", category="success")
+        # else:
+        #     flash("Nothing updated", category="info")
         db.session.commit()
         return redirect(url_for("views.homedate", data = lol2))
     return render_template("home.html")

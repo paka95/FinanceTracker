@@ -261,6 +261,27 @@ font-size: 25px;
 .expense_list:focus {
   outline: 0; 
 }
+
+
+.expense_preview {
+  display: flex; 
+  justify-content: space-between;
+  border-radius: 5px;
+  margin-bottom: 5px;
+  padding: 10px;
+  width: 100%; 
+  border: none;
+  /* outline: 0;
+  box-shadow: none; */
+  background-color: rgba(191, 191, 191, 0.0);
+}
+
+.expense_preview:hover {
+  background-color: rgba(191, 191, 191, 0.3);
+}
+
+
+
 .add_expense_form {
   width: 100%; 
   height: 50px; 
@@ -382,7 +403,8 @@ font-size: 25px;
 
 .monthly_expenses_button:hover {
   text-decoration: none;
-  color: rgb(40, 40, 40)
+  
+  font-weight: 900;
 }
 
 
@@ -396,20 +418,20 @@ font-size: 25px;
   
   /* Track */
   ::-webkit-scrollbar-track {
-  background-color: rgba(200, 200, 200, 0.0);
+  background-color: rgba(200, 200, 200, 0.2);
   border-radius: 10px;
   }
   
   /* Handle */
   ::-webkit-scrollbar-thumb {
-  background: rgba(50, 50, 50, 0.0); 
+  background: rgba(50, 50, 50, 0.3); 
   border-radius: 10px;
  
   }
   
   /* Handle on hover */
   ::-webkit-scrollbar-thumb:hover {
-  background: rgba(53, 24, 75, 0.0); 
+  background: rgba(69, 108, 225, 0.6); 
   }
   /* === */
 

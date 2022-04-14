@@ -38,16 +38,33 @@
         <div style="height: 300px; overflow-y: auto; overflow-x: hidden; padding: 10px;">
             {% for row in month %}
 
-            <button class="expense_list" type="button" data-toggle="modal" data-target="" > 
-                <div style="width: 30%; font-weight: bold;">{{ row[0] }} </div>
-                <div style="width: 30%; font-weight: bold;">
-                {% if user.currency == "zł" %}
-                    {{ row[1] }} {{ user.currency }}
+            <div class="expense_preview">
+            <!-- <button class="expense_list" type="button" data-toggle="modal" data-target="" >  -->
+
+                {% if row[0] == 'Misc' %}
+                    <div style="width: 20%; font-weight: bold; color: white; text-align: center; background-color: #1C84DF; border-radius: 5px; height: 24px">{{ row[0] }}</div> 
+                {% elif row[0] == 'Bills' %}
+                    <div style="width: 20%; font-weight: bold; color: white; text-align: center; background-color: #F0C92C; border-radius: 5px; height: 24px">{{ row[0] }}</div> 
+                {% elif row[0] == 'Fees' %}
+                <div style="width: 20%; font-weight: bold; color: white; text-align: center; background-color: #4F6D7A; border-radius: 5px; height: 24px">{{ row[0] }}</div> 
+                    {% elif row[0] == 'Transport' %}
+                <div style="width: 20%; font-weight: bold; color: white; text-align: center; background-color: #56A3A6; border-radius: 5px; height: 24px">{{ row[0] }}</div>
+                {% elif row[0] == 'Food' %}
+                    <div style="width: 20%; font-weight: bold; color: white; text-align: center; background-color: #DF433E; border-radius: 5px; height: 24px">{{ row[0] }}</div> 
                 {% else %}
-                    {{ user.currency }}{{ row[1] }}
+                    <div style="width: 20%; font-weight: bold; text-align: center;">{{ row[0] }}</div> 
+                {% endif %}
+
+                
+                <div style="width: 30%; font-weight: bold; text-align: center;">
+                {% if user.currency == "zł" %}
+                    {{ '%.2f'|format(row[1]) }} {{ user.currency }}
+                {% else %}
+                    {{ user.currency }}{{ '%.2f'|format(row[1]) }}
                 {% endif %}
                 </div> 
-            </button>
+            <!-- </button> -->
+            </div>
             <div style="width: 100%; height: 1px; background-color: rgb(53, 24, 75); margin-top: 5px; margin-bottom: 5px;"></div>
             {% endfor %}
         </div>

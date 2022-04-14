@@ -20,6 +20,9 @@
 
 {% block content %}
 
+<div style="position: absolute; width: 250px; margin-top: 10%; margin-left: 7%; background-color: rgba(255, 255, 0, 0.0)">
+    <canvas id="myChart" style="width:100%;max-width:400px; height: 300px"></canvas>
+</div>
 
 <div class="main-form">
 
@@ -42,14 +45,28 @@
 
         <button class="expense_list" type="button" data-toggle="modal" data-target="#edit{{expense.id}}"> 
             <div style="width: 10%; font-weight: bold;">{{ expense.date_created.strftime('%H:%M') }} </div>
-            <div style="width: 35%; font-weight: bold; text-overflow: ellipsis; overflow: hidden; height:20px ">{{ expense.name }} </div>
-            <div style="width: 20%; font-weight: bold;">{{ expense.label }}</div> 
-            <div style="width: 25%; font-weight: bold; text-overflow: ellipsis; overflow: hidden; height: 20px">
-                {% if user.currency == "zł" %}
-                    {{ expense.amount }} {{user.currency}}
-                {% else %}
-                    {{user.currency}}{{ expense.amount }}
-                {% endif %}
+            <div style="width: 35%; font-weight: bold; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; height:22px ">{{ expense.name }} </div>
+            {% if expense.label == 'Misc' %}
+                <div style="width: 20%; font-weight: bold; color: white; text-align: center; background-color: #1C84DF; border-radius: 5px; height: 22px">{{ expense.label }}</div> 
+            {% elif expense.label == 'Bills' %}
+                <div style="width: 20%; font-weight: bold; color: white; text-align: center; background-color: #E3B505; border-radius: 5px; height: 22px">{{ expense.label }}</div> 
+            {% elif expense.label == 'Fees' %}
+            <div style="width: 20%; font-weight: bold; color: white; text-align: center; background-color: #4F6D7A; border-radius: 5px; height: 22px">{{ expense.label }}</div> 
+                {% elif expense.label == 'Transport' %}
+            <div style="width: 20%; font-weight: bold; color: white; text-align: center; background-color: #56A3A6; border-radius: 5px; height: 22px">{{ expense.label }}</div>
+            {% elif expense.label == 'Food' %}
+                <div style="width: 20%; font-weight: bold; color: white; text-align: center; background-color: #DB504A; border-radius: 5px; height: 22px">{{ expense.label }}</div> 
+            {% else %}
+                <div style="width: 20%; font-weight: bold; text-align: center;">{{ expense.label }}</div> 
+            {% endif %}
+            <div style="width: 25%; font-weight: bold; text-overflow: ellipsis; overflow: hidden; height: 22px;">
+                <div style="float:right">
+                    {% if user.currency == "zł" %}
+                        {{ "%.2f"|format(expense.amount) }} {{user.currency}}
+                    {% else %}
+                        {{user.currency}}{{ "%.2f"|format(expense.amount) }}
+                    {% endif %}
+                </div>
             </div>
         </button>
 
@@ -75,9 +92,15 @@
                     <div class="modal-body">
                         <div style="display: flex; justify-content: space-evenly;">
                             <input type=date style="display:none" name="chosen_data_in_form" value="{{terazdata}}">
+
+                            <div style="position:relative">
+                            <label for="updatename" style="font-size:12px; height: 15px; position: absolute; left: 5px; top: -10px">Name</label>
                             <input type="text" class="tooltip-test update_expense_form" title="{{expense.name}}" name="updatename" id="updatename" value="{{expense.name}}" autocomplete="off">
-                            
-                            <select id="updatelabel" name="updatelabel" class="update_expense_form">
+                            </div>
+
+                            <div style="position:relative">
+                            <label for="updatelabel" style="font-size:12px; height: 15px; position: absolute; left: 5px; top: -10px">Label</label>
+                            <select id="updatelabel" name="updatelabel" class="update_expense_form" style="cursor: pointer">
                                 <option value="select" disabled selected hidden>{{expense.label}}</option>
                                 <option value="Transport">Transport</option>
                                 <option value="Bills">Bills</option>
@@ -85,12 +108,13 @@
                                 <option value="Misc">Misc</option>
                                 <option value="Fees">Fees</option>
                             </select>
+                            </div>
 
-                            {% if user.currency == "zł" %}
-                                <input type="text" class="update_expense_form" name="updateamount" id="updateamount" value="{{expense.amount}} {{user.currency}}" autocomplete="off">
-                            {% else %}
-                                <input type="text" class="update_expense_form" name="updateamount" id="updateamount" value="{{user.currency}}{{expense.amount}}" autocomplete="off">
-                            {% endif %}
+                            <div style="position:relative">
+                                <label for="updateamount" style="font-size:12px; height: 15px; position: absolute; left: 5px; top: -10px">Amount (in {{user.currency}})</label>
+                                <input type="text" class="update_expense_form" name="updateamount" id="updateamount" value="{{'%.2f'|format(expense.amount)}}" autocomplete="off">
+                            </div>
+
                         </div>
                     </div>
                     <div style="display:flex; justify-content: space-evenly; padding: 10px">
@@ -135,25 +159,29 @@
         <div style="width: 100%; height: 2px; background-color: rgb(53, 24, 75); margin-top: 10px; margin-bottom: 10px;"></div>
 
         <div>
-            <div style="font-size: 20px; display:flex; justify-content: space-between; padding-right: 35px; padding-left: 35px;">
+            <div style="font-size: 20px; display:flex; justify-content: space-between; padding-right: 15px; padding-left: 35px;">
                 <div>daily expenses:</div>
-                <div style="width: 100px; text-overflow: ellipsis; overflow: hidden; height: 30px" class="tooltip-test" title="{{total_expenses}} {{user.currency}}">
-                    {% if user.currency == "zł" %}
-                        {{ total_expenses }} {{user.currency}}
-                    {% else %}
-                        {{user.currency}}{{ total_expenses }}
-                    {% endif %}
+                <div style="width: 120px; text-overflow: ellipsis; overflow: hidden; height: 30px;" class="tooltip-test" title="{{total_expenses}} {{user.currency}}">
+                    <div style="float:right">
+                        {% if user.currency == "zł" %}
+                            {{ '%.2f'|format(total_expenses) }} {{user.currency}}
+                        {% else %}
+                            {{user.currency}}{{ total_expenses }}
+                        {% endif %}
+                    </div>
                 </div>
             </div>
             <div style="width: 100%; height: 1px; background-color: black; margin-top: 5px; margin-bottom: 5px;"></div>
-            <div style="font-size: 20px; display:flex; justify-content: space-between; padding-right: 35px; padding-left: 35px;">
+            <div style="font-size: 20px; display:flex; justify-content: space-between; padding-right: 15px; padding-left: 35px;">
                 <div><a href="/preview/{{terazdata}}" class="monthly_expenses_button">monthly expenses:</a></div>
-                <div style="width: 100px; text-overflow: ellipsis; overflow: hidden; height: 30px" class="tooltip-test" title="{{montly_rounded}} {{user.currency}}">
-                    {% if user.currency == "zł" %}
-                        {{montly_rounded}} {{user.currency}}
-                    {% else %}
-                        {{user.currency}}{{montly_rounded}}
-                    {% endif %}
+                <div style="width: 120px; text-overflow: ellipsis; overflow: hidden; height: 30px;" class="tooltip-test" title="{{montly_rounded}} {{user.currency}}">
+                    <div style="float: right">
+                        {% if user.currency == "zł" %}
+                            {{ '%.2f'|format(montly_rounded) }} {{user.currency}}
+                        {% else %}
+                            {{user.currency}}{{ '%.2f'|format(montly_rounded) }}
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
@@ -164,7 +192,7 @@
         <div style="padding: 20px; text-align: center; height: 320px; margin-top: 50px; ">
             <input type=date style="display:none" name="chosen_data_in_form" value="{{terazdata}}">
             {{ form.name (placeholder="Name", autocomplete="off", class="add_expense_form") }}
-            <select id="labell" name="labell" class="add_expense_form">
+            <select id="labell" name="labell" class="add_expense_form" style="cursor: pointer">
                 <option value="select" disabled selected hidden>Select a label</option>
                 <option value="Transport">Transport</option>
                 <option value="Bills">Bills</option>
@@ -188,5 +216,45 @@ function goTo() {
 }
 </script>
 
+<script>
+    var xValues = []
+    var yValues = []
+    
+    {% for row in month_grouped %}
+        xValues.push("{{row[0]}}");
+        yValues.push("{{row[1]}}");
+    {% endfor %}
+    
+    var barColors = [
+      "#1C84DF",
+      "#56A3A6",
+      "#DF433E",
+      "#4F6D7A",
+      "#F0C92C"
+    ];
+    
+    new Chart("myChart", {
+      type: "pie",
+      data: {
+        labels: xValues,
+        datasets: [{
+          backgroundColor: barColors,
+          data: yValues,
+        }]
+      },
+      options: {
+        title: {
+          display: true,
+          text: "Monthly expenses (in {{user.currency}})",
+          fontColor: "white"
+        },
+        legend: {
+            labels: {
+                fontColor: "white"
+            }
+        }
+      }
+    });
+</script>
 
 {% endblock %}  
