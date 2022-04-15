@@ -21,28 +21,6 @@ def home():
     return redirect(url_for('views.homedate', data = now_formatted))
 
 
-@views.route('/test', methods=['POST', 'GET'])
-def test():
-    user = User.query.filter_by(id=current_user.id).first()
-    month = db.session.query(Expense.label, db.func.round(db.func.sum(Expense.amount), 2)).filter_by(user_id = current_user.id).filter(extract('month', Expense.date_created)==4).group_by(Expense.label).all() 
-    for row in month:
-        print("label", month[0][0], "amount", row[1])
-    return render_template('test.html', month = month, user = user)
-
-
-
-@views.route('/test2', methods=['POST', 'GET'])
-def test2():
-    user = User.query.filter_by(id=current_user.id).first()
-    month = db.session.query(Expense.label, db.func.round(db.func.sum(Expense.amount), 2)).filter_by(user_id = current_user.id).filter(extract('month', Expense.date_created)==4).group_by(Expense.label).all()
-
-    total = 0
-    for row in month:
-        total = total + row[1]
-    print(total)
-    
-    return render_template('test2.html', total = total, month = month)
-
 
 @views.route("/<data>", methods=['GET', 'POST'])
 @login_required
@@ -105,6 +83,7 @@ def homedate(data):
     return render_template("home.html", form = form, expenses = expenses, terazdata = data, total_expenses = total_expenses, montly_rounded = montly_rounded, user = user, month_grouped = month_grouped)
 
 
+
 @views.route("/change_expense/<id>", methods=['GET', 'POST'])
 @login_required
 def change_expense(id):
@@ -133,35 +112,6 @@ def change_expense(id):
         else:
             expense.amount = third
         flash("Expense updated", category='success')
-
-        # if first and second and third:
-        #     expense.name = first
-        #     expense.label = second
-        #     expense.amount = third
-        #     flash("Whole expense updated", category="success")
-        # elif first and second:
-        #     expense.name = first
-        #     expense.label = second
-        #     flash("Updated name and label", category="success")
-        # elif first and third:
-        #     expense.name = first
-        #     expense.amount = third
-        #     flash("Updated name and amount", category="success")
-        # elif second and third:
-        #     expense.label = second
-        #     expense.amount = third
-        #     flash("Updated label and amount", category="success")
-        # elif first:
-        #     expense.name = first
-        #     flash("Updated name", category="success")
-        # elif second:
-        #     expense.label = second
-        #     flash("Updated label", category="success")
-        # elif third:
-        #     expense.amount = third
-        #     flash("Updated amount", category="success")
-        # else:
-        #     flash("Nothing updated", category="info")
         db.session.commit()
         return redirect(url_for("views.homedate", data = lol2))
     return render_template("home.html")
@@ -226,6 +176,7 @@ def preview_grouped(dada):
     return render_template('preview_grouped.html', total = total, month = month, dada = dada, user = user)
 
 
+
 @views.route("/change_currency", methods=['POST', 'GET'])
 @login_required
 def change_currency():
@@ -244,3 +195,9 @@ def profile():
     user = User.query.filter_by(id=current_user.id).first()
     currency = user.currency
     return render_template("profile.html", user = user, currency = currency)
+
+
+
+@views.route('/test', methods=['POST', 'GET'])
+def test():
+    return render_template('test.html')

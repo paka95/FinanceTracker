@@ -5,30 +5,22 @@
 
 
 {% block content %}
-<form class="form-log-reg" method="POST">
-    {{ form.hidden_tag() }}
-    <div>
-        {{ form.email(class="form-log-reg-input", placeholder="EMAIL", autocomplete="off") }}
-        <!-- <input class="form-log-reg-input" type="text" placeholder="EMAIL"/> -->
-    </div>
-    <div>
-        {{ form.password(class="form-log-reg-input", placeholder="PASSWORD") }}
-        <!-- <input class="form-log-reg-input" type="text" placeholder="PASSWORD"/> -->
-    </div>
-    <div>
-        {{ form.confirm_password(class="form-log-reg-input", placeholder="CONFIRM PASSWORD") }}
-        <!-- <input class="form-log-reg-input" type="text" placeholder="CONFIRM PASSWORD"/> -->
-    </div>
-    <div>
-        {{ form.submit(class="form-log-reg-button") }}
-        <!-- <button class="form-log-reg-button" type="submit">REGISTER</button> -->
-    </div>
-    <div style="font-family: 'Rationale', sans-serif; font-size: 15px; margin-top: 10px;"><a href=login style="text-decoration: none; font-weight: bold; color:#694A81">ALREADY REGISTERED</a></div>
-</form>
-
-
-
-
-
-
+    <form class="form-log-reg" method="POST">
+        {{ form.hidden_tag() }}
+        <div>
+            {{ form.email(class="form-log-reg-input", placeholder="EMAIL", autocomplete="off") }}
+        </div>
+        <div>
+            {{ form.password(class="form-log-reg-input", placeholder="PASSWORD") }}
+        </div>
+        <div>
+            {{ form.confirm_password(class="form-log-reg-input", placeholder="CONFIRM PASSWORD") }}
+        </div>
+        <div>
+            {{ form.submit(class="form-log-reg-button") }}
+        </div>
+        <div style="font-family: 'Rationale', sans-serif; font-size: 15px; margin-top: 10px;">
+            <a href=login style="text-decoration: none; font-weight: bold; color:#694A81">ALREADY REGISTERED</a>
+        </div>
+    </form>
 {% endblock %}

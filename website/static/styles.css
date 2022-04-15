@@ -88,8 +88,8 @@ width: 80%;
 margin-top: 50px;
 height: 40px;
 font-size: 25px;
-
 }
+
 
 .form-log-reg-button:hover {
   background-color: rgb(29, 49, 161);
@@ -147,8 +147,6 @@ font-size: 25px;
   width: 180px; 
   height: 40px;
   font-size: 25px;
-  
-
   position: absolute; 
   left: 25%; 
   bottom: 20%; 
@@ -183,41 +181,57 @@ font-size: 25px;
   text-decoration: none;
 }
 
-  .main-form{
-    background-color: rgba(191, 191, 191, 0.7); 
-    width: 800px; 
-    height:500px; 
-    font-weight: bold;
-    font-family: Roboto;
-    margin: auto;
-    margin-top: 5%;  
-    border-radius: 5px;
-    border-style: solid;
-    border-width: 1px;
-    border-color: rgb(182, 189, 192); 
-  }
+.main-form{
+  background-color: rgba(191, 191, 191, 0.7); 
+  width: 800px; 
+  height:500px; 
+  font-weight: bold;
+  font-family: Roboto;
+  margin: auto;
+  margin-top: 5%;  
+  border-radius: 5px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgb(182, 189, 192); 
+}
 
-  .list-in-form {
-    background-color: #EBEBEB;
-    width: 80%;
-    height: 80%;
-    border-radius: 10px;
-    position: absolute;
-    bottom: 5%;
-    left: 50%;
-    -ms-transform: translate(-50%);
-    transform: translate(-50%);
-  }
+.separator_line_sm {
+  width: 100%; 
+  height: 1px; 
+  background-color: rgb(53, 24, 75); 
+  margin-top: 5px; 
+  margin-bottom: 5px;
+}
 
-  .date-button {
-    background-color: rgb(43, 71, 229);
-    color: rgb(255, 255, 255);
-    border-radius: 5px;
-    font-size: 15px;
-    width: 80px;
-    font-family: 'Rationale', sans-serif;
-    border: none
-  }
+.separator_line_bg {
+  width: 100%; 
+  height: 2px; 
+  background-color: rgb(53, 24, 75); 
+  margin-top: 10px; 
+  margin-bottom: 10px;
+}
+
+.list-in-form {
+  background-color: #EBEBEB;
+  width: 80%;
+  height: 80%;
+  border-radius: 10px;
+  position: absolute;
+  bottom: 5%;
+  left: 50%;
+  -ms-transform: translate(-50%);
+  transform: translate(-50%);
+}
+
+.date-button {
+  background-color: rgb(43, 71, 229);
+  color: rgb(255, 255, 255);
+  border-radius: 5px;
+  font-size: 15px;
+  width: 80px;
+  font-family: 'Rationale', sans-serif;
+  border: none
+}
 
 .date-button:hover {
   color: rgb(255, 255, 255);
@@ -226,12 +240,12 @@ font-size: 25px;
   text-decoration: none;
 }
 
-  .expenses_listing {
-    position: absolute;
-    right: 10%;
-    top: 40%;
-    background-color: red;
-  }
+.expenses_listing {
+  position: absolute;
+  right: 10%;
+  top: 40%;
+  background-color: red;
+}
 
 #date_picker {
   border-radius:5px; 
@@ -331,6 +345,13 @@ font-size: 25px;
   overflow: hidden;
 }
 
+.update_input_label {
+  font-size:12px; 
+  height: 15px; 
+  position: absolute; 
+  left: 5px; 
+  top: -10px
+}
 
 .update_button{
   display: block;
@@ -381,9 +402,6 @@ font-size: 25px;
   font-family: Play; 
 }
 
-/* .modal {
-  width: 500px
-} */
 
  .modal-dialog {
   margin: auto;
@@ -407,6 +425,85 @@ font-size: 25px;
   font-weight: 900;
 }
 
+.expense_label {
+  width: 20%; 
+  font-weight: bold; 
+  color: white; 
+  text-align: center; 
+  border-radius: 5px; 
+  height: 24px;
+}
+
+.expense_content {
+  font-weight: bold; 
+  text-overflow: ellipsis; 
+  overflow: hidden; 
+  height: 24px;
+}
+
+.preview_totals {
+  height: 50px; 
+  display:flex; 
+  float: right; 
+  margin-right: 50px; 
+  font-size: 25px;
+}
+
+.home_totals_row {
+  font-size: 20px; 
+  display:flex; 
+  justify-content: space-between; 
+  padding-right: 15px; 
+  padding-left: 35px;
+}
+
+.home_totals_row_amount {
+  width: 120px; 
+  text-overflow: ellipsis; 
+  overflow: hidden; 
+  height: 30px;
+}
+
+.preview_main_form {
+  text-align: center; 
+  height: 50px; 
+  padding: 10px; 
+  display: flex; 
+  justify-content: space-between;
+}
+
+.preview_button {
+  width:100px; 
+  display:block; 
+  padding: 4px
+}
+
+.preview_expense_record {
+  font-weight: bold; 
+  text-align: center;
+}
+
+.expenses_board {
+  height: 300px; 
+  overflow-y: auto; 
+  overflow-x: hidden; 
+  padding: 10px;
+}
+
+.profile_separator_bg {
+  height: 2px; 
+  width:100%; 
+  margin-top: 10px; 
+  background-color:#232121
+}
+
+.profile_separator_sm {
+  height: 1px; 
+  width:100%; 
+  margin-top: 10px; 
+  margin-bottom: 10px; 
+  background-color:#342f2f
+}
 
   /* Scrollbar styling */
 ::-webkit-scrollbar {

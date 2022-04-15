@@ -2,259 +2,239 @@
 {% block title %}Finase{% endblock %}
 
 {% block button %}
-
-
-<div class="dropdown">
-    <a class="dropdown-toggle logout-button" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      Options
-    </a>
-  
-    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-      <a class="dropdown-item" href="/profile">Profile</a>
-      <a class="dropdown-item" href="/logout">Logout</a>
+    <div class="dropdown">
+        <a class="dropdown-toggle logout-button" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Options
+        </a>
+    
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+        <a class="dropdown-item" href="/profile">Profile</a>
+        <a class="dropdown-item" href="/logout">Logout</a>
+        </div>
     </div>
-  </div>
-
-
 {% endblock %}
 
+
 {% block content %}
+    <div style="position: absolute; width: 250px; margin-top: 10%; margin-left: 7%; background-color: rgba(255, 255, 0, 0.0)">
+        <canvas id="myChart" style="width:100%;max-width:400px; height: 300px"></canvas>
+    </div>
 
-<div style="position: absolute; width: 250px; margin-top: 10%; margin-left: 7%; background-color: rgba(255, 255, 0, 0.0)">
-    <canvas id="myChart" style="width:100%;max-width:400px; height: 300px"></canvas>
-</div>
-
-<div class="main-form">
-
-
-<div style="padding: 10px; display: flex; height: 100%">
-    <div style="width: 60%; text-align: center; padding: 10px">
-        <form method="POST" action="#">
-            <div style="display: flex; width: 100%; justify-content: space-evenly;">
-                <button type="submit" class="date-button" formaction="/">TODAY</button>
-                <input type=date id=date_picker name="chosen_data" value="{{terazdata}}" onchange="goTo()">
-                <button type="submit" id="goto" class="date-button" style="display:none">GO TO</button>
-            </div>
-        </form>
-        
-
-        <div style="width: 100%; height: 2px; background-color: rgb(53, 24, 75); margin-top: 10px; margin-bottom: 10px;"></div>
-
-        <div style="height: 300px; overflow-y: auto; overflow-x: hidden; padding: 10px">
-        {% for expense in expenses %}
-
-        <button class="expense_list" type="button" data-toggle="modal" data-target="#edit{{expense.id}}"> 
-            <div style="width: 10%; font-weight: bold;">{{ expense.date_created.strftime('%H:%M') }} </div>
-            <div style="width: 35%; font-weight: bold; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; height:22px ">{{ expense.name }} </div>
-            {% if expense.label == 'Misc' %}
-                <div style="width: 20%; font-weight: bold; color: white; text-align: center; background-color: #1C84DF; border-radius: 5px; height: 22px">{{ expense.label }}</div> 
-            {% elif expense.label == 'Bills' %}
-                <div style="width: 20%; font-weight: bold; color: white; text-align: center; background-color: #E3B505; border-radius: 5px; height: 22px">{{ expense.label }}</div> 
-            {% elif expense.label == 'Fees' %}
-            <div style="width: 20%; font-weight: bold; color: white; text-align: center; background-color: #4F6D7A; border-radius: 5px; height: 22px">{{ expense.label }}</div> 
-                {% elif expense.label == 'Transport' %}
-            <div style="width: 20%; font-weight: bold; color: white; text-align: center; background-color: #56A3A6; border-radius: 5px; height: 22px">{{ expense.label }}</div>
-            {% elif expense.label == 'Food' %}
-                <div style="width: 20%; font-weight: bold; color: white; text-align: center; background-color: #DB504A; border-radius: 5px; height: 22px">{{ expense.label }}</div> 
-            {% else %}
-                <div style="width: 20%; font-weight: bold; text-align: center;">{{ expense.label }}</div> 
-            {% endif %}
-            <div style="width: 25%; font-weight: bold; text-overflow: ellipsis; overflow: hidden; height: 22px;">
-                <div style="float:right">
-                    {% if user.currency == "zł" %}
-                        {{ "%.2f"|format(expense.amount) }} {{user.currency}}
-                    {% else %}
-                        {{user.currency}}{{ "%.2f"|format(expense.amount) }}
-                    {% endif %}
-                </div>
-            </div>
-        </button>
-
-
-
-        
-        <!-- Update modal -->
-        <div class="modal fade" id="edit{{expense.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                <h5 class="modal-title" style="font-family: Play;" id="exampleModalLabel"></h5>
-                <div>Added on {{expense.date_created}}</div>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                </div>
+    <div class="main-form">
+        <div style="padding: 10px; display: flex; height: 100%">
+            <div style="width: 60%; text-align: center; padding: 10px">
+                <form method="POST" action="#">
+                    <div style="display: flex; width: 100%; justify-content: space-evenly;">
+                        <button type="submit" class="date-button" formaction="/">TODAY</button>
+                        <input type=date id=date_picker name="chosen_data" value="{{terazdata}}" onchange="goTo()">
+                        <button type="submit" id="goto" class="date-button" style="display:none">GO TO</button>
+                    </div>
+                </form>
                 
-                
+                <div class="separator_line_bg"></div>
 
-                <form method="POST" action="/change_expense/{{expense.id}}">
-      
-                    <div class="modal-body">
-                        <div style="display: flex; justify-content: space-evenly;">
-                            <input type=date style="display:none" name="chosen_data_in_form" value="{{terazdata}}">
-
-                            <div style="position:relative">
-                            <label for="updatename" style="font-size:12px; height: 15px; position: absolute; left: 5px; top: -10px">Name</label>
-                            <input type="text" class="tooltip-test update_expense_form" title="{{expense.name}}" name="updatename" id="updatename" value="{{expense.name}}" autocomplete="off">
+                <div class="expenses_board">
+                    {% for expense in expenses %}
+                        <button class="expense_list" type="button" data-toggle="modal" data-target="#edit{{expense.id}}"> 
+                            <div style="width: 10%; font-weight: bold;">{{ expense.date_created.strftime('%H:%M') }} </div>
+                            <div style="width: 35%; white-space: nowrap" class="expense_content">{{ expense.name }} </div>
+                            {% if expense.label == 'Misc' %}
+                                <div style="background-color: #1C84DF" class="expense_label">{{ expense.label }}</div> 
+                            {% elif expense.label == 'Bills' %}
+                                <div style="background-color: #E3B505" class="expense_label">{{ expense.label }}</div> 
+                            {% elif expense.label == 'Fees' %}
+                                <div style="background-color: #4F6D7A" class="expense_label">{{ expense.label }}</div> 
+                            {% elif expense.label == 'Transport' %}
+                                <div style="background-color: #56A3A6" class="expense_label">{{ expense.label }}</div>
+                            {% elif expense.label == 'Food' %}
+                                <div style="background-color: #DB504A" class="expense_label">{{ expense.label }}</div> 
+                            {% else %}
+                                <div  class="expense_label">{{ expense.label }}</div> 
+                            {% endif %}
+                            <div style="width: 25%" class="expense_content">
+                                <div style="float:right">
+                                    {% if user.currency == "zł" %}
+                                        {{ "%.2f"|format(expense.amount) }} {{user.currency}}
+                                    {% else %}
+                                        {{user.currency}}{{ "%.2f"|format(expense.amount) }}
+                                    {% endif %}
+                                </div>
                             </div>
+                        </button>
 
-                            <div style="position:relative">
-                            <label for="updatelabel" style="font-size:12px; height: 15px; position: absolute; left: 5px; top: -10px">Label</label>
-                            <select id="updatelabel" name="updatelabel" class="update_expense_form" style="cursor: pointer">
-                                <option value="select" disabled selected hidden>{{expense.label}}</option>
-                                <option value="Transport">Transport</option>
-                                <option value="Bills">Bills</option>
-                                <option value="Food">Food</option>
-                                <option value="Misc">Misc</option>
-                                <option value="Fees">Fees</option>
-                            </select>
+
+                        <!-- Update modal -->
+                        <div class="modal fade" id="edit{{expense.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" style="font-family: Play;" id="exampleModalLabel"></h5>
+                                        <div>Added on {{expense.date_created}}</div>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    
+                                    <form method="POST" action="/change_expense/{{expense.id}}">
+                                        <div class="modal-body">
+                                            <div style="display: flex; justify-content: space-evenly;">
+                                                <input type=date style="display: none" name="chosen_data_in_form" value="{{terazdata}}">
+                                                <div style="position:relative">
+                                                    <label for="updatename" class="update_input_label">Name</label>
+                                                    <input type="text" class="tooltip-test update_expense_form" title="{{expense.name}}" name="updatename" id="updatename" value="{{expense.name}}" autocomplete="off">
+                                                </div>
+                                                <div style="position:relative">
+                                                    <label for="updatelabel" class="update_input_label">Label</label>
+                                                    <select id="updatelabel" name="updatelabel" class="update_expense_form" style="cursor: pointer">
+                                                        <option value="select" disabled selected hidden>{{expense.label}}</option>
+                                                        <option value="Transport">Transport</option>
+                                                        <option value="Bills">Bills</option>
+                                                        <option value="Food">Food</option>
+                                                        <option value="Misc">Misc</option>
+                                                        <option value="Fees">Fees</option>
+                                                    </select>
+                                                </div>
+                                                <div style="position:relative">
+                                                    <label for="updateamount" class="update_input_label">Amount (in {{user.currency}})</label>
+                                                    <input type="text" class="update_expense_form" name="updateamount" id="updateamount" value="{{'%.2f'|format(expense.amount)}}" autocomplete="off">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div style="display:flex; justify-content: space-evenly; padding: 10px">
+                                            <button class="update_button" type="submit" >Update</button>
+                                            <button class="delete_button" data-dismiss="modal" data-toggle="modal" data-target="#delete{{expense.id}}">Delete</button> 
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
+                        </div>
 
-                            <div style="position:relative">
-                                <label for="updateamount" style="font-size:12px; height: 15px; position: absolute; left: 5px; top: -10px">Amount (in {{user.currency}})</label>
-                                <input type="text" class="update_expense_form" name="updateamount" id="updateamount" value="{{'%.2f'|format(expense.amount)}}" autocomplete="off">
+
+                        <!-- Delete confirmation modal -->
+                        <div class="modal fade" id="delete{{expense.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" class="rusure" id="exampleModalLabel"><b>Are you sure you want to delete this expense?</b></h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                            
+                                    <form method="POST" action="/delete_expense/{{expense.id}}">
+                                        <input type=date style="display:none" name="chosen_data_in_form" value="{{terazdata}}">
+                                        <div style="display: flex; justify-content: space-evenly; padding: 10px">
+                                            <button class="update_button" data-dismiss="modal" >No</button>
+                                            <button class="delete_button" formaction="/delete_expense/{{expense.id}}">Yes</button>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
+                        </div>
+                        <div class="separator_line_sm"></div>
+                    {% endfor %}
+                </div>
 
+                <div class="separator_line_bg"></div>
+
+                <div>
+                    <div class="home_totals_row">
+                        <div>daily expenses:</div>
+                        <div class="tooltip-test home_totals_row_amount" title="{{total_expenses}} {{user.currency}}">
+                            <div style="float:right">
+                                {% if user.currency == "zł" %}
+                                    {{ '%.2f'|format(total_expenses) }} {{user.currency}}
+                                {% else %}
+                                    {{user.currency}}{{ total_expenses }}
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
-                    <div style="display:flex; justify-content: space-evenly; padding: 10px">
-                        <button class="update_button" type="submit" >Update</button>
-                        <button class="delete_button" data-dismiss="modal" data-toggle="modal" data-target="#delete{{expense.id}}">Delete</button> 
+
+                    <div class="separator_line_sm"></div>
+
+                    <div class="home_totals_row">
+                        <div><a href="/preview/{{terazdata}}" class="monthly_expenses_button">monthly expenses:</a></div>
+                        <div class="tooltip-test home_totals_row_amount" title="{{montly_rounded}} {{user.currency}}">
+                            <div style="float: right">
+                                {% if user.currency == "zł" %}
+                                    {{ '%.2f'|format(montly_rounded) }} {{user.currency}}
+                                {% else %}
+                                    {{user.currency}}{{ '%.2f'|format(montly_rounded) }}
+                                {% endif %}
+                            </div>
+                        </div>
                     </div>
-                  </form>
-            </div>
-            </div>
-        </div>
-
-
-        <!-- Delete confirmation modal -->
-        <div class="modal fade" id="delete{{expense.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" class="rusure" id="exampleModalLabel"><b>Are you sure you want to delete this expense?</b></h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
                 </div>
-        
-                <form method="POST" action="/delete_expense/{{expense.id}}">
-        
+            </div>
+
+            <form style="width: 40%;" method="POST">
+                {{ form.hidden_tag() }}
+                <div style="padding: 20px; text-align: center; height: 320px; margin-top: 50px">
                     <input type=date style="display:none" name="chosen_data_in_form" value="{{terazdata}}">
-                  <div style="display: flex; justify-content: space-evenly; padding: 10px">
-                    <button class="update_button" data-dismiss="modal" >No</button>
-                    <button class="delete_button" formaction="/delete_expense/{{expense.id}}">Yes</button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-
-
-        <div style="width: 100%; height: 1px; background-color: rgb(53, 24, 75); margin-top: 5px; margin-bottom: 5px;"></div>
-        {% endfor %}
-        </div>
-
-
-        <div style="width: 100%; height: 2px; background-color: rgb(53, 24, 75); margin-top: 10px; margin-bottom: 10px;"></div>
-
-        <div>
-            <div style="font-size: 20px; display:flex; justify-content: space-between; padding-right: 15px; padding-left: 35px;">
-                <div>daily expenses:</div>
-                <div style="width: 120px; text-overflow: ellipsis; overflow: hidden; height: 30px;" class="tooltip-test" title="{{total_expenses}} {{user.currency}}">
-                    <div style="float:right">
-                        {% if user.currency == "zł" %}
-                            {{ '%.2f'|format(total_expenses) }} {{user.currency}}
-                        {% else %}
-                            {{user.currency}}{{ total_expenses }}
-                        {% endif %}
-                    </div>
+                    {{ form.name (placeholder="Name", autocomplete="off", class="add_expense_form") }}
+                    <select id="labell" name="labell" class="add_expense_form" style="cursor: pointer">
+                        <option value="select" disabled selected hidden>Select a label</option>
+                        <option value="Transport">Transport</option>
+                        <option value="Bills">Bills</option>
+                        <option value="Food">Food</option>
+                        <option value="Misc">Misc</option>
+                        <option value="Fees">Fees</option>
+                    </select>
+                    {{ form.amount (placeholder="Amount", autocomplete="off", class="add_expense_form") }}
+                    {{ form.submit (class="add_expense_button") }}
                 </div>
-            </div>
-            <div style="width: 100%; height: 1px; background-color: black; margin-top: 5px; margin-bottom: 5px;"></div>
-            <div style="font-size: 20px; display:flex; justify-content: space-between; padding-right: 15px; padding-left: 35px;">
-                <div><a href="/preview/{{terazdata}}" class="monthly_expenses_button">monthly expenses:</a></div>
-                <div style="width: 120px; text-overflow: ellipsis; overflow: hidden; height: 30px;" class="tooltip-test" title="{{montly_rounded}} {{user.currency}}">
-                    <div style="float: right">
-                        {% if user.currency == "zł" %}
-                            {{ '%.2f'|format(montly_rounded) }} {{user.currency}}
-                        {% else %}
-                            {{user.currency}}{{ '%.2f'|format(montly_rounded) }}
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
+            </form>
         </div>
     </div>
 
-    <form style="width: 40%;" method="POST">
-        {{ form.hidden_tag() }}
-        <div style="padding: 20px; text-align: center; height: 320px; margin-top: 50px; ">
-            <input type=date style="display:none" name="chosen_data_in_form" value="{{terazdata}}">
-            {{ form.name (placeholder="Name", autocomplete="off", class="add_expense_form") }}
-            <select id="labell" name="labell" class="add_expense_form" style="cursor: pointer">
-                <option value="select" disabled selected hidden>Select a label</option>
-                <option value="Transport">Transport</option>
-                <option value="Bills">Bills</option>
-                <option value="Food">Food</option>
-                <option value="Misc">Misc</option>
-                <option value="Fees">Fees</option>
-            </select>
-            {{ form.amount (placeholder="Amount", autocomplete="off", class="add_expense_form") }}
-            {{ form.submit (class="add_expense_button") }}
-        </div>
-    </form>
-</div>
-    
-</div>
 
 
-
-<script>
-function goTo() {
-    document.getElementById("goto").click();
-}
-</script>
-
-<script>
-    var xValues = []
-    var yValues = []
+    <script>
+    function goTo() {
+        document.getElementById("goto").click();
+    }
+    </script>
     
-    {% for row in month_grouped %}
-        xValues.push("{{row[0]}}");
-        yValues.push("{{row[1]}}");
-    {% endfor %}
-    
-    var barColors = [
-      "#1C84DF",
-      "#56A3A6",
-      "#DF433E",
-      "#4F6D7A",
-      "#F0C92C"
-    ];
-    
-    new Chart("myChart", {
-      type: "pie",
-      data: {
-        labels: xValues,
-        datasets: [{
-          backgroundColor: barColors,
-          data: yValues,
-        }]
-      },
-      options: {
-        title: {
-          display: true,
-          text: "Monthly expenses (in {{user.currency}})",
-          fontColor: "white"
+    <script>
+        var xValues = []
+        var yValues = []
+        
+        {% for row in month_grouped %}
+            xValues.push("{{row[0]}}");
+            yValues.push("{{row[1]}}");
+        {% endfor %}
+        
+        var barColors = [
+        "#1C84DF",
+        "#56A3A6",
+        "#DF433E",
+        "#4F6D7A",
+        "#F0C92C"
+        ];
+        
+        new Chart("myChart", {
+        type: "pie",
+        data: {
+            labels: xValues,
+            datasets: [{
+            backgroundColor: barColors,
+            data: yValues,
+            }]
         },
-        legend: {
-            labels: {
-                fontColor: "white"
+        options: {
+            title: {
+            display: true,
+            text: "Monthly expenses (in {{user.currency}})",
+            fontColor: "white"
+            },
+            legend: {
+                labels: {
+                    fontColor: "white"
+                }
             }
         }
-      }
-    });
-</script>
+        });
+    </script>
 
 {% endblock %}  
