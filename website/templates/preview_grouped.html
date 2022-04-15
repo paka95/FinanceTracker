@@ -27,9 +27,9 @@
 
         <form method="POST" class="preview_main_form">
             <a href="/" class="date-button preview_button">BACK</a>
-            <input type="month" id=date_picker name="datt" value="{{dada}}" onchange="goTo()"/>
+            <input type="month" id=date_picker name="datt" value="{{expense_month}}" onchange="goTo()"/>
             <input type="submit" id="goto" style="display:none">
-            <a href="/preview/{{dada}}" class="date-button preview_button">UNGROUP</a>
+            <a href="/preview/{{expense_month}}" class="date-button preview_button">UNGROUP</a>
         </form>
 
         <div class="separator_line_bg"></div>

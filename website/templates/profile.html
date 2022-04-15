@@ -37,11 +37,11 @@
             <div style="display: flex">
                 <div>Change currency: </div>
                 <form method="POST" action="/change_currency">
-                    <select style="height: 25px; width: 50px; margin-left: 10px; padding: 5px; border-radius: 2px;" onchange="change_currency()" value="currency" name="cur">
+                    <select style="height: 25px; width: 50px; margin-left: 10px; padding: 5px; border-radius: 2px;" onchange="change_currency()" name="cur">
                         <option value="zł">zł</option>
                         <option value="€">€</option>
                         <option value="£">£</option>
-                        <option value="{{currency}}" selected disabled hidden>{{currency}}</option>
+                        <option value="{{user.currency}}" selected disabled hidden>{{user.currency}}</option>
                     </select>
                     <input type="submit" id="cur" style="display: none">
                 </form>

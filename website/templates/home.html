@@ -26,7 +26,7 @@
                 <form method="POST" action="#">
                     <div style="display: flex; width: 100%; justify-content: space-evenly;">
                         <button type="submit" class="date-button" formaction="/">TODAY</button>
-                        <input type=date id=date_picker name="chosen_data" value="{{terazdata}}" onchange="goTo()">
+                        <input type=date id=date_picker name="date_picker_date" value="{{terazdata}}" onchange="goTo()">
                         <button type="submit" id="goto" class="date-button" style="display:none">GO TO</button>
                     </div>
                 </form>
@@ -78,7 +78,7 @@
                                     <form method="POST" action="/change_expense/{{expense.id}}">
                                         <div class="modal-body">
                                             <div style="display: flex; justify-content: space-evenly;">
-                                                <input type=date style="display: none" name="chosen_data_in_form" value="{{terazdata}}">
+                                                <input type=date style="display: none" name="date_picker_date_in_form" value="{{terazdata}}">
                                                 <div style="position:relative">
                                                     <label for="updatename" class="update_input_label">Name</label>
                                                     <input type="text" class="tooltip-test update_expense_form" title="{{expense.name}}" name="updatename" id="updatename" value="{{expense.name}}" autocomplete="off">
@@ -122,7 +122,7 @@
                                     </div>
                             
                                     <form method="POST" action="/delete_expense/{{expense.id}}">
-                                        <input type=date style="display:none" name="chosen_data_in_form" value="{{terazdata}}">
+                                        <input type=date style="display:none" name="date_picker_date_in_form" value="{{terazdata}}">
                                         <div style="display: flex; justify-content: space-evenly; padding: 10px">
                                             <button class="update_button" data-dismiss="modal" >No</button>
                                             <button class="delete_button" formaction="/delete_expense/{{expense.id}}">Yes</button>
@@ -155,12 +155,12 @@
 
                     <div class="home_totals_row">
                         <div><a href="/preview/{{terazdata}}" class="monthly_expenses_button">monthly expenses:</a></div>
-                        <div class="tooltip-test home_totals_row_amount" title="{{montly_rounded}} {{user.currency}}">
+                        <div class="tooltip-test home_totals_row_amount" title="{{monthly_rounded}} {{user.currency}}">
                             <div style="float: right">
                                 {% if user.currency == "zł" %}
-                                    {{ '%.2f'|format(montly_rounded) }} {{user.currency}}
+                                    {{ '%.2f'|format(monthly_rounded) }} {{user.currency}}
                                 {% else %}
-                                    {{user.currency}}{{ '%.2f'|format(montly_rounded) }}
+                                    {{user.currency}}{{ '%.2f'|format(monthly_rounded) }}
                                 {% endif %}
                             </div>
                         </div>
@@ -171,7 +171,7 @@
             <form style="width: 40%;" method="POST">
                 {{ form.hidden_tag() }}
                 <div style="padding: 20px; text-align: center; height: 320px; margin-top: 50px">
-                    <input type=date style="display:none" name="chosen_data_in_form" value="{{terazdata}}">
+                    <input type=date style="display:none" name="date_picker_date_in_form" value="{{terazdata}}">
                     {{ form.name (placeholder="Name", autocomplete="off", class="add_expense_form") }}
                     <select id="labell" name="labell" class="add_expense_form" style="cursor: pointer">
                         <option value="select" disabled selected hidden>Select a label</option>
@@ -195,23 +195,36 @@
         document.getElementById("goto").click();
     }
     </script>
-    
+
     <script>
+        var pairs = {
+                    "Misc" : "#1C84DF",
+                    "Bills" : "#F0C92C",
+                    "Food" : "#DF433E",
+                    "Fees" : "#4F6D7A",
+                    "Transport": "#56A3A6"
+                    };
         var xValues = []
         var yValues = []
+        var barColors = []
         
         {% for row in month_grouped %}
             xValues.push("{{row[0]}}");
             yValues.push("{{row[1]}}");
         {% endfor %}
-        
-        var barColors = [
-        "#1C84DF",
-        "#56A3A6",
-        "#DF433E",
-        "#4F6D7A",
-        "#F0C92C"
-        ];
+
+        barColors = xValues.map(myFunction)
+        function myFunction(clr) {
+            return pairs[clr]
+        }
+
+        // var barColors = [
+        // "#1C84DF",
+        // "#56A3A6",
+        // "#DF433E",
+        // "#4F6D7A",
+        // "#F0C92C"
+        // ];
         
         new Chart("myChart", {
         type: "pie",
