@@ -70,9 +70,9 @@
             <div style="width: 100px; text-align: center;">Total:</div> 
             <div style="width: 120px">
                 {% if user.currency == "zł" %}
-                    {{ total }} {{ user.currency }}
+                    {{ '%.2f'|format(total) }} {{ user.currency }}
                 {% else %}
-                    {{ user.currency }}{{ total }}
+                    {{ user.currency }}{{ '%.2f'|format(total) }}
                 {% endif %}
             </div>
         </div>

@@ -27,7 +27,7 @@ def create_app():
 
     from .models import User, Expense
     
-    create_database(app)
+    # create_database(app)
     
     login_manager = LoginManager()
     login_manager.login_view = "auth.login"

@@ -194,3 +194,5 @@ def profile():
 @views.route('/test', methods=['POST', 'GET'])
 def test():
     return render_template('test.html')
+
+
