@@ -57,4 +57,8 @@ Changing currency:
 https://user-images.githubusercontent.com/94203043/171178635-df44935c-df42-4963-afe0-07acc5cdc867.mp4
 
 
+## Plan for development
+In the near future I plan on adding:
+* a list of summary and average spending by each month
+* a feature of displaying all expenses grouped by specific tags
 
