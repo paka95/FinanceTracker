@@ -9,7 +9,7 @@ If you are in need of managing your spending and keep track of your expenses, th
 - Frontend - HTML5/CSS, a little bit of JavaScript
 
 ## Setup
-In order to run this project, simply clone the repository, then in console run:
+In order to run this project, simply clone the repository, setup the database (in file /website/__ init __.py), then in console run:
 ```
 $ pip install -r requirements.txt
 $ python app.py
