@@ -61,5 +61,5 @@ https://user-images.githubusercontent.com/94203043/171178635-df44935c-df42-4963-
 In the near future I plan on adding:
 * a list of summary and average spending by each month
 * a feature of displaying all expenses grouped by specific tags
-* 
+* a feature to put
 
