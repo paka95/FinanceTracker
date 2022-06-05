@@ -17,7 +17,7 @@ class LoginForm(FlaskForm):
 
 class ExpenseForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(max=120)])
-    amount = FloatField('Amount', validators=[DataRequired(), NumberRange(max=99999, message='Enter smaller number')])
+    amount = FloatField('Amount', validators=[DataRequired(), NumberRange(min=0.01, max=99999, message='Enter amount between 0.01 - 99999.99')])
     labell = SelectField('Label', validators=[DataRequired()], choices=[('Select a label'), ('Transport'), ('Bills'), ('Food'), ('Misc'), ('Fees')])
     submit = SubmitField('Add expense')
 

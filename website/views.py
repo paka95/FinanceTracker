@@ -54,8 +54,6 @@ def homedate(expense_date):
 
     if request.method == "POST":
         date_picker_date = request.form.get('date_picker_date') #value of changed date when changing dates
-        # month_specified = int(expense_date[5:7])
-        # print("date_picker_date:", date_picker_date)
 
         today_datetime = datetime.now()
         today_formatted = today_datetime.strftime("%Y-%m-%d")
@@ -63,14 +61,10 @@ def homedate(expense_date):
         if form.validate_on_submit():
             specified_date = request.form.get('date_picker_date_in_form')
             specified_expense_date = date(year=int(specified_date[0:4]), month=int(specified_date[5:7]), day=int(specified_date[8:10]))
-            # print("specified_expense_date: ", specified_expense_date)
             today_formatted = date(year=int(today_formatted[0:4]), month=int(today_formatted[5:7]), day=int(today_formatted[8:10]))
             if specified_expense_date == today_formatted:
                 new_expense = Expense(name = form.name.data, amount = form.amount.data, label = form.labell.data, user_id = current_user.id)
-                # print("specified_expense_date2: ", specified_expense_date)
             else:
-                # print("expense_date to:", expense_date)
-                # print("specified_expense_date3: ", specified_expense_date)
                 new_expense = Expense(name = form.name.data, amount = form.amount.data, label = form.labell.data, user_id = current_user.id, date_created = expense_date)
             db.session.add(new_expense)
             db.session.commit()
@@ -80,7 +74,7 @@ def homedate(expense_date):
             return redirect(url_for('views.homedate', expense_date = date_picker_date))
         else:
             specified_date = request.form.get('date_picker_date_in_form')
-            flash("Please enter smaller amount", category='danger')
+            flash("Please enter amount between 0.01 - 99999.99", category='danger')
             return redirect(url_for('views.homedate', expense_date = specified_date))
 
     return render_template("home.html", form = form, expenses = expenses, terazdata = expense_date, total_expenses = total_expenses_rounded, monthly_rounded = monthly_rounded, user = user, month_grouped = month_grouped)
